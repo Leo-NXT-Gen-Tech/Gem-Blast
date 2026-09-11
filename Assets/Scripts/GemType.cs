@@ -3,7 +3,7 @@ public enum GemType
     Red,
     Blue,
     Green,
-    Yellow,
+    Pink,
     Purple,
     Orange
 }

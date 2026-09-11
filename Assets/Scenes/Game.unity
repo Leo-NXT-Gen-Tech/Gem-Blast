@@ -967,7 +967,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BoardManager
   rows: 8
   columns: 8
-  gemPrefab: {fileID: 5720054848446274202, guid: 0bec7083f206d0844bc31b1dc4d2a2fe, type: 3}
+  redGemPrefab: {fileID: 5720054848446274202, guid: dd53c5611ce5135418e482024d44294c, type: 3}
+  blueGemPrefab: {fileID: 5720054848446274202, guid: 44afb0fd043e842429cdc0417696e4e5, type: 3}
+  greenGemPrefab: {fileID: 5720054848446274202, guid: 7f9efb424fe4451429cbdcc0bdc8ea5c, type: 3}
+  pinkGemPrefab: {fileID: 5720054848446274202, guid: 499356d470cd5d547b037c1575bcaa42, type: 3}
+  purpleGemPrefab: {fileID: 5720054848446274202, guid: 7c3de68974fb1f64d873d5c1fda8748e, type: 3}
+  orangeGemPrefab: {fileID: 5720054848446274202, guid: 656cde3e79dfccc40806b2da3de865a7, type: 3}
   boardPanel: {fileID: 321463608}
   fallDuration: 0.25
   swapDuration: 0.2
@@ -975,7 +980,7 @@ MonoBehaviour:
   movesText: {fileID: 2100768788}
   goalProgressText: {fileID: 535569133}
   startingMoves: 30
-  targetRedGems: 20
+  targetRedGems: 10
   levelCompletePanel: {fileID: 874496109}
   levelFailedPanel: {fileID: 1308419733}
 --- !u!1 &427248218
@@ -1849,7 +1854,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &874496110
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2777,7 +2782,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1835953420}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1442701003
@@ -3294,6 +3300,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1822864498}
   m_CullTransparentMesh: 1
+--- !u!1 &1835953419
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1835953420}
+  - component: {fileID: 1835953421}
+  m_Layer: 0
+  m_Name: GameLevelManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1835953420
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1835953419}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1411418124}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1835953421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1835953419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95aceaa62d276234f948a948174e9321, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameLevelManager
 --- !u!1 &1848642648
 GameObject:
   m_ObjectHideFlags: 0

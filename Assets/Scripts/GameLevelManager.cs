@@ -6,56 +6,107 @@ public class GameLevelManager : MonoBehaviour
 
     public const int MaxLevel = 30;
 
+    private const string CURRENT_LEVEL_KEY =
+        "CurrentLevel";
+
+    private const string UNLOCKED_LEVEL_KEY =
+        "UnlockedLevel";
+
+    private int currentLevel = 1;
+    private int unlockedLevel = 1;
+
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
+        if (Instance != null &&
+            Instance != this)
         {
             Destroy(gameObject);
+            return;
         }
+
+        Instance = this;
+
+        DontDestroyOnLoad(gameObject);
+
+        currentLevel =
+            PlayerPrefs.GetInt(
+                CURRENT_LEVEL_KEY,
+                1
+            );
+
+        unlockedLevel =
+            PlayerPrefs.GetInt(
+                UNLOCKED_LEVEL_KEY,
+                1
+            );
+
+        currentLevel =
+            Mathf.Clamp(
+                currentLevel,
+                1,
+                MaxLevel
+            );
+
+        unlockedLevel =
+            Mathf.Clamp(
+                unlockedLevel,
+                1,
+                MaxLevel
+            );
     }
 
-    // -----------------------------
+    // =========================================
     // CURRENT LEVEL
-    // -----------------------------
+    // =========================================
 
     public int GetCurrentLevel()
     {
-        return PlayerPrefs.GetInt("CurrentLevel", 1);
+        return currentLevel;
     }
 
     public void SetCurrentLevel(int level)
     {
-        level = Mathf.Clamp(level, 1, MaxLevel);
+        level =
+            Mathf.Clamp(
+                level,
+                1,
+                MaxLevel
+            );
 
-        PlayerPrefs.SetInt("CurrentLevel", level);
+        currentLevel = level;
+
+        PlayerPrefs.SetInt(
+            CURRENT_LEVEL_KEY,
+            currentLevel
+        );
+
         PlayerPrefs.Save();
     }
 
-    // -----------------------------
-    // UNLOCKED LEVEL
-    // -----------------------------
+    // =========================================
+    // UNLOCK
+    // =========================================
 
     public int GetUnlockedLevel()
     {
-        return PlayerPrefs.GetInt("UnlockedLevel", 1);
+        return unlockedLevel;
     }
 
     public void UnlockNextLevel()
     {
-        int currentLevel = GetCurrentLevel();
-        int unlockedLevel = GetUnlockedLevel();
+        int nextLevel =
+            currentLevel + 1;
 
-        if (currentLevel + 1 > unlockedLevel &&
-            currentLevel < MaxLevel)
+        if (nextLevel > MaxLevel)
+            return;
+
+        if (nextLevel > unlockedLevel)
         {
+            unlockedLevel = nextLevel;
+
             PlayerPrefs.SetInt(
-                "UnlockedLevel",
-                currentLevel + 1
+                UNLOCKED_LEVEL_KEY,
+                unlockedLevel
             );
 
             PlayerPrefs.Save();
@@ -64,102 +115,87 @@ public class GameLevelManager : MonoBehaviour
 
     public bool IsLevelUnlocked(int level)
     {
-        return level <= GetUnlockedLevel();
+        return level <= unlockedLevel;
     }
 
-    // -----------------------------
-    // LEVEL MOVES
-    // -----------------------------
+    // =========================================
+    // LEVEL DATA
+    // =========================================
+
+    public LevelData GetLevelData(int level)
+    {
+        level =
+            Mathf.Clamp(
+                level,
+                1,
+                MaxLevel
+            );
+
+        LevelData data =
+            Resources.Load<LevelData>(
+                "Levels/Level_" + level
+            );
+
+        if (data == null)
+        {
+            Debug.LogWarning(
+                "LevelData not found for Level " +
+                level
+            );
+        }
+
+        return data;
+    }
+
+    // =========================================
+    // MOVES
+    // =========================================
 
     public int GetMoves(int level)
     {
-        switch (level)
-        {
-            case 1: return 30;
-            case 2: return 30;
-            case 3: return 30;
-            case 4: return 30;
-            case 5: return 29;
+        LevelData data =
+            GetLevelData(level);
 
-            case 6: return 28;
-            case 7: return 28;
-            case 8: return 28;
-            case 9: return 27;
-            case 10: return 27;
-
-            case 11: return 26;
-            case 12: return 26;
-            case 13: return 26;
-            case 14: return 25;
-            case 15: return 25;
-
-            case 16: return 25;
-            case 17: return 24;
-            case 18: return 24;
-            case 19: return 24;
-            case 20: return 23;
-
-            case 21: return 23;
-            case 22: return 23;
-            case 23: return 22;
-            case 24: return 22;
-            case 25: return 22;
-
-            case 26: return 21;
-            case 27: return 21;
-            case 28: return 20;
-            case 29: return 20;
-            case 30: return 20;
-        }
+        if (data != null)
+            return data.moves;
 
         return 30;
     }
 
-    // -----------------------------
-    // RED GEM GOAL
-    // -----------------------------
+    // =========================================
+    // RED GOAL
+    // =========================================
 
     public int GetRedGoal(int level)
     {
-        switch (level)
-        {
-            case 1: return 20;
-            case 2: return 20;
-            case 3: return 22;
-            case 4: return 22;
-            case 5: return 25;
+        LevelData data =
+            GetLevelData(level);
 
-            case 6: return 25;
-            case 7: return 27;
-            case 8: return 27;
-            case 9: return 30;
-            case 10: return 30;
-
-            case 11: return 30;
-            case 12: return 32;
-            case 13: return 32;
-            case 14: return 35;
-            case 15: return 35;
-
-            case 16: return 35;
-            case 17: return 37;
-            case 18: return 38;
-            case 19: return 40;
-            case 20: return 40;
-
-            case 21: return 40;
-            case 22: return 42;
-            case 23: return 42;
-            case 24: return 45;
-            case 25: return 45;
-
-            case 26: return 45;
-            case 27: return 48;
-            case 28: return 48;
-            case 29: return 50;
-            case 30: return 50;
-        }
+        if (data != null)
+            return data.redGoal;
 
         return 20;
+    }
+
+    // =========================================
+    // RESET PROGRESS
+    // =========================================
+
+    public void ResetProgress()
+    {
+        currentLevel = 1;
+        unlockedLevel = 1;
+
+        PlayerPrefs.SetInt(
+            CURRENT_LEVEL_KEY,
+            1
+        );
+
+        PlayerPrefs.SetInt(
+            UNLOCKED_LEVEL_KEY,
+            1
+        );
+
+        PlayerPrefs.Save();
     }
 }

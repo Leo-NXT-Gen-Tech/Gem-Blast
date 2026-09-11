@@ -16,7 +16,6 @@ public class GemView : MonoBehaviour,
 
     private BoardManager boardManager;
 
-
     // =========================================================
     // DRAG SETTINGS
     // =========================================================
@@ -35,7 +34,6 @@ public class GemView : MonoBehaviour,
     [SerializeField]
     private float tiltAmount = 0.03f;
 
-
     // =========================================================
     // DRAG SOUND
     // =========================================================
@@ -47,7 +45,6 @@ public class GemView : MonoBehaviour,
 
     [SerializeField]
     private AudioClip dragSound;
-
 
     // =========================================================
     // DRAG VARIABLES
@@ -63,7 +60,6 @@ public class GemView : MonoBehaviour,
 
     private bool isDragging = false;
 
-
     // =========================================================
     // RECT TRANSFORM
     // =========================================================
@@ -71,7 +67,6 @@ public class GemView : MonoBehaviour,
     private RectTransform rectTransform;
 
     private RectTransform parentRect;
-
 
     // =========================================================
     // AWAKE
@@ -82,30 +77,24 @@ public class GemView : MonoBehaviour,
         rectTransform =
             GetComponent<RectTransform>();
 
-
         if (gemImage == null)
         {
             gemImage =
                 GetComponentInChildren<Image>(true);
         }
 
-
         if (rectTransform != null)
         {
             parentRect =
-                rectTransform.parent
-                as RectTransform;
+                rectTransform.parent as RectTransform;
         }
 
-
-        // Find AudioSource automatically
         if (audioSource == null)
         {
             audioSource =
                 GetComponent<AudioSource>();
         }
     }
-
 
     // =========================================================
     // SET GEM
@@ -121,10 +110,7 @@ public class GemView : MonoBehaviour,
 
         row = gemRow;
         column = gemColumn;
-
-        SetColor(type);
     }
-
 
     // =========================================================
     // SET BOARD MANAGER
@@ -137,6 +123,36 @@ public class GemView : MonoBehaviour,
         boardManager = manager;
     }
 
+    // =========================================================
+    // SET GEM SPRITE
+    // =========================================================
+
+    public void SetGemSprite(
+        Sprite sprite
+    )
+    {
+        if (gemImage == null)
+        {
+            gemImage =
+                GetComponentInChildren<Image>(true);
+        }
+
+        if (gemImage == null)
+        {
+            Debug.LogError(
+                "Gem Image not found on " +
+                gameObject.name
+            );
+
+            return;
+        }
+
+        gemImage.sprite = sprite;
+
+        // Important:
+        // Do not tint the actual gem sprite.
+        gemImage.color = Color.white;
+    }
 
     // =========================================================
     // SET COLOR
@@ -146,72 +162,17 @@ public class GemView : MonoBehaviour,
         GemType type
     )
     {
+        // Kept for compatibility.
+        // Actual gem appearance is controlled
+        // by the sprite/prefab.
+
         gemType = type;
 
-
-        if (gemImage == null)
-            return;
-
-
-        switch (type)
+        if (gemImage != null)
         {
-            case GemType.Red:
-
-                gemImage.color =
-                    Color.red;
-
-                break;
-
-
-            case GemType.Blue:
-
-                gemImage.color =
-                    Color.blue;
-
-                break;
-
-
-            case GemType.Green:
-
-                gemImage.color =
-                    Color.green;
-
-                break;
-
-
-            case GemType.Yellow:
-
-                gemImage.color =
-                    Color.yellow;
-
-                break;
-
-
-            case GemType.Purple:
-
-                gemImage.color =
-                    new Color(
-                        0.6f,
-                        0.2f,
-                        0.8f
-                    );
-
-                break;
-
-
-            case GemType.Orange:
-
-                gemImage.color =
-                    new Color(
-                        1f,
-                        0.5f,
-                        0f
-                    );
-
-                break;
+            gemImage.color = Color.white;
         }
     }
-
 
     // =========================================================
     // BEGIN DRAG
@@ -224,10 +185,8 @@ public class GemView : MonoBehaviour,
         if (boardManager == null)
             return;
 
-
         dragStartScreenPosition =
             eventData.position;
-
 
         if (rectTransform != null)
         {
@@ -241,13 +200,9 @@ public class GemView : MonoBehaviour,
                 rectTransform.localRotation;
         }
 
-
         isDragging = true;
 
-
-        // Bring gem to front
         transform.SetAsLastSibling();
-
 
         // =====================================================
         // PICKUP EFFECT
@@ -256,10 +211,8 @@ public class GemView : MonoBehaviour,
         if (rectTransform != null)
         {
             rectTransform.localScale =
-                originalScale *
-                pickupScale;
+                originalScale * pickupScale;
         }
-
 
         // =====================================================
         // DRAG SOUND
@@ -276,7 +229,6 @@ public class GemView : MonoBehaviour,
         }
     }
 
-
     // =========================================================
     // DRAG
     // =========================================================
@@ -288,19 +240,16 @@ public class GemView : MonoBehaviour,
         if (!isDragging)
             return;
 
-
         if (rectTransform == null)
             return;
 
-
         // =====================================================
-        // MOVE GEM WITH FINGER / MOUSE
+        // MOVE GEM
         // =====================================================
 
         if (parentRect != null)
         {
             Vector2 localPointerPosition;
-
 
             if (
                 RectTransformUtility
@@ -317,7 +266,6 @@ public class GemView : MonoBehaviour,
             }
         }
 
-
         // =====================================================
         // TILT EFFECT
         // =====================================================
@@ -326,9 +274,7 @@ public class GemView : MonoBehaviour,
             eventData.position -
             dragStartScreenPosition;
 
-
         float tilt = 0f;
-
 
         if (
             Mathf.Abs(drag.x) >
@@ -336,9 +282,7 @@ public class GemView : MonoBehaviour,
         )
         {
             tilt =
-                -drag.x *
-                tiltAmount;
-
+                -drag.x * tiltAmount;
 
             tilt =
                 Mathf.Clamp(
@@ -348,7 +292,6 @@ public class GemView : MonoBehaviour,
                 );
         }
 
-
         rectTransform.localRotation =
             Quaternion.Euler(
                 0f,
@@ -356,7 +299,6 @@ public class GemView : MonoBehaviour,
                 tilt
             );
     }
-
 
     // =========================================================
     // END DRAG
@@ -369,17 +311,14 @@ public class GemView : MonoBehaviour,
         if (!isDragging)
             return;
 
-
         isDragging = false;
-
 
         Vector2 drag =
             eventData.position -
             dragStartScreenPosition;
 
-
         // =====================================================
-        // RESET GEM POSITION
+        // RESET POSITION
         // =====================================================
 
         if (rectTransform != null)
@@ -394,9 +333,8 @@ public class GemView : MonoBehaviour,
                 originalRotation;
         }
 
-
         // =====================================================
-        // TOO SMALL = CANCEL
+        // TOO SMALL
         // =====================================================
 
         if (
@@ -407,21 +345,17 @@ public class GemView : MonoBehaviour,
             return;
         }
 
-
         // =====================================================
-        // DETERMINE DIRECTION
+        // DIRECTION
         // =====================================================
 
         Vector2 direction;
-
 
         if (
             Mathf.Abs(drag.x) >
             Mathf.Abs(drag.y)
         )
         {
-            // LEFT / RIGHT
-
             if (drag.x > 0)
             {
                 direction =
@@ -435,8 +369,6 @@ public class GemView : MonoBehaviour,
         }
         else
         {
-            // UP / DOWN
-
             if (drag.y > 0)
             {
                 direction =
@@ -449,9 +381,8 @@ public class GemView : MonoBehaviour,
             }
         }
 
-
         // =====================================================
-        // SEND TO BOARD MANAGER
+        // SEND TO BOARD
         // =====================================================
 
         if (boardManager != null)
@@ -463,7 +394,6 @@ public class GemView : MonoBehaviour,
         }
     }
 
-
     // =========================================================
     // GET GEM TYPE
     // =========================================================
@@ -472,7 +402,6 @@ public class GemView : MonoBehaviour,
     {
         return gemType;
     }
-
 
     // =========================================================
     // GET ROW
@@ -483,7 +412,6 @@ public class GemView : MonoBehaviour,
         return row;
     }
 
-
     // =========================================================
     // GET COLUMN
     // =========================================================
@@ -492,7 +420,6 @@ public class GemView : MonoBehaviour,
     {
         return column;
     }
-
 
     // =========================================================
     // SET GRID POSITION
@@ -507,22 +434,17 @@ public class GemView : MonoBehaviour,
         column = gemColumn;
     }
 
-
     // =========================================================
     // SELECT / DESELECT
     // =========================================================
-    // Kept for compatibility.
-    // Drag system does NOT use selection.
 
     public void Select()
     {
     }
 
-
     public void Deselect()
     {
     }
-
 
     public bool IsSelected()
     {

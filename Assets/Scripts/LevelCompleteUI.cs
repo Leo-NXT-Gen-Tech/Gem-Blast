@@ -128,32 +128,26 @@ public class LevelCompleteUI : MonoBehaviour
     // NEXT LEVEL
     // =========================================================
 
-    private void OnNextLevelClicked()
+    public void OnNextLevelClicked()
     {
-        Debug.Log("NEXT LEVEL BUTTON CLICKED");
+        if (GameLevelManager.Instance == null)
+            return;
 
-        // Current level
-        int currentLevel =
-            PlayerPrefs.GetInt("CurrentLevel", 1);
+        GameLevelManager.Instance.UnlockNextLevel();
 
-        // Next level
-        int nextLevel = currentLevel + 1;
+        int nextLevel =
+            GameLevelManager.Instance.GetCurrentLevel() + 1;
 
-        PlayerPrefs.SetInt(
-            "CurrentLevel",
-            nextLevel
-        );
+        if (nextLevel > GameLevelManager.MaxLevel)
+        {
+            Debug.Log("ALL 30 LEVELS COMPLETED!");
+            return;
+        }
 
-        PlayerPrefs.Save();
+        GameLevelManager.Instance.SetCurrentLevel(nextLevel);
 
-        Debug.Log(
-            "Loading Level: " +
-            nextLevel
-        );
-
-        // Reload current game scene
-        SceneManager.LoadScene(
-            SceneManager.GetActiveScene().buildIndex
+        UnityEngine.SceneManagement.SceneManager.LoadScene(
+            UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex
         );
     }
 
