@@ -1,168 +1,485 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class LevelCompleteUI : MonoBehaviour
 {
+    // =========================================================
+    // PANEL
+    // =========================================================
+
     [Header("Panel")]
     [SerializeField] private GameObject levelCompletePanel;
 
-    [Header("Stars")]
-    [SerializeField] private GameObject star1;
-    [SerializeField] private GameObject star2;
-    [SerializeField] private GameObject star3;
+    // =========================================================
+    // UI
+    // =========================================================
 
-    [Header("Score")]
+    [Header("UI")]
     [SerializeField] private TMP_Text scoreText;
-
-    [Header("Goal")]
     [SerializeField] private TMP_Text goalCompletedText;
     [SerializeField] private TMP_Text goalProgressText;
 
-    [Header("Buttons")]
+    // =========================================================
+    // STARS
+    // =========================================================
+
+    [Header("Stars")]
+    [SerializeField] private GameObject[] stars;
+
+    // =========================================================
+    // NEXT LEVEL BUTTON
+    // =========================================================
+
+    [Header("Next Level Button")]
     [SerializeField] private Button nextLevelButton;
-    [SerializeField] private Button retryButton;
+
+    // =========================================================
+    // AUDIO
+    // =========================================================
+
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip nextLevelClickSound;
+
+    // =========================================================
+    // INTERNAL
+    // =========================================================
+
+    private bool isShowing = false;
+
+    // =========================================================
+    // AWAKE
+    // =========================================================
 
     private void Awake()
     {
-        // Panel OFF when game starts
-        if (levelCompletePanel != null)
-            levelCompletePanel.SetActive(false);
+        if (levelCompletePanel == null)
+        {
+            levelCompletePanel = gameObject;
+        }
 
-        // Button listeners
         if (nextLevelButton != null)
-            nextLevelButton.onClick.AddListener(OnNextLevelClicked);
+        {
+            nextLevelButton.onClick.RemoveListener(
+                OnNextLevelClicked
+            );
 
-        if (retryButton != null)
-            retryButton.onClick.AddListener(OnRetryClicked);
+            nextLevelButton.onClick.AddListener(
+                OnNextLevelClicked
+            );
+        }
+    }
+
+    // =========================================================
+    // START
+    // IMPORTANT:
+    // DO NOT HIDE PANEL HERE
+    // =========================================================
+
+    private void Start()
+    {
+        // Intentionally empty.
+        // Do not call HidePanel() here.
+        //
+        // BoardManager handles the initial hidden state.
+        // When the level is completed, ShowLevelComplete()
+        // will activate and display this panel.
     }
 
     // =========================================================
     // SHOW LEVEL COMPLETE
+    // 14 ARGUMENTS
     // =========================================================
 
     public void ShowLevelComplete(
         int score,
-        int movesRemaining,
-        int redGemsCollected,
-        int targetRedGems)
+        int moves,
+
+        int redCollected,
+        int redTarget,
+
+        int blueCollected,
+        int blueTarget,
+
+        int greenCollected,
+        int greenTarget,
+
+        int pinkCollected,
+        int pinkTarget,
+
+        int purpleCollected,
+        int purpleTarget,
+
+        int orangeCollected,
+        int orangeTarget)
     {
         if (levelCompletePanel == null)
-            return;
+        {
+            levelCompletePanel = gameObject;
+        }
+
+        // =====================================================
+        // ACTIVATE ALL PARENTS
+        // =====================================================
+
+        Transform current =
+            levelCompletePanel.transform;
+
+        while (current != null)
+        {
+            current.gameObject.SetActive(true);
+
+            current = current.parent;
+        }
+
+        // =====================================================
+        // ACTIVATE PANEL
+        // =====================================================
 
         levelCompletePanel.SetActive(true);
 
-        // Score
+        isShowing = true;
+
+        // =====================================================
+        // RECT TRANSFORM RESET
+        // =====================================================
+
+        RectTransform rect =
+            levelCompletePanel.GetComponent<RectTransform>();
+
+        if (rect != null)
+        {
+            rect.localScale =
+                Vector3.one;
+
+            rect.localRotation =
+                Quaternion.identity;
+        }
+
+        // =====================================================
+        // CANVAS GROUP
+        // =====================================================
+
+        CanvasGroup canvasGroup =
+            levelCompletePanel.GetComponent<CanvasGroup>();
+
+        if (canvasGroup == null)
+        {
+            canvasGroup =
+                levelCompletePanel.AddComponent<CanvasGroup>();
+        }
+
+        canvasGroup.alpha = 1f;
+        canvasGroup.interactable = true;
+        canvasGroup.blocksRaycasts = true;
+
+        // =====================================================
+        // BRING TO FRONT
+        // =====================================================
+
+        levelCompletePanel.transform.SetAsLastSibling();
+
+        // =====================================================
+        // SCORE
+        // =====================================================
+
         if (scoreText != null)
         {
-            scoreText.text = score.ToString();
+            scoreText.text =
+                "SCORE: " +
+                score;
         }
 
-        // Goal completed
+        // =====================================================
+        // GOAL COUNTS
+        // =====================================================
+
+        int completedGoals = 0;
+        int totalGoals = 0;
+
+        CheckGoal(
+            redCollected,
+            redTarget,
+            ref completedGoals,
+            ref totalGoals
+        );
+
+        CheckGoal(
+            blueCollected,
+            blueTarget,
+            ref completedGoals,
+            ref totalGoals
+        );
+
+        CheckGoal(
+            greenCollected,
+            greenTarget,
+            ref completedGoals,
+            ref totalGoals
+        );
+
+        CheckGoal(
+            pinkCollected,
+            pinkTarget,
+            ref completedGoals,
+            ref totalGoals
+        );
+
+        CheckGoal(
+            purpleCollected,
+            purpleTarget,
+            ref completedGoals,
+            ref totalGoals
+        );
+
+        CheckGoal(
+            orangeCollected,
+            orangeTarget,
+            ref completedGoals,
+            ref totalGoals
+        );
+
+        // =====================================================
+        // GOALS COMPLETED TEXT
+        // =====================================================
+
         if (goalCompletedText != null)
         {
-            goalCompletedText.text = "✓ GOAL COMPLETED!";
+            goalCompletedText.text =
+                "GOALS COMPLETED: " +
+                completedGoals +
+                " / " +
+                totalGoals;
         }
 
-        // Goal progress
+        // =====================================================
+        // GOAL PROGRESS
+        // =====================================================
+
         if (goalProgressText != null)
         {
+            string progress = "";
+
+            AddGoalProgress(
+                ref progress,
+                redCollected,
+                redTarget,
+                "RED"
+            );
+
+            AddGoalProgress(
+                ref progress,
+                blueCollected,
+                blueTarget,
+                "BLUE"
+            );
+
+            AddGoalProgress(
+                ref progress,
+                greenCollected,
+                greenTarget,
+                "GREEN"
+            );
+
+            AddGoalProgress(
+                ref progress,
+                pinkCollected,
+                pinkTarget,
+                "PINK"
+            );
+
+            AddGoalProgress(
+                ref progress,
+                purpleCollected,
+                purpleTarget,
+                "PURPLE"
+            );
+
+            AddGoalProgress(
+                ref progress,
+                orangeCollected,
+                orangeTarget,
+                "ORANGE"
+            );
+
             goalProgressText.text =
-                redGemsCollected + " / " +
-                targetRedGems +
-                " RED GEMS";
+                progress;
         }
 
-        // Calculate stars
-        int stars = CalculateStars(movesRemaining);
+        // =====================================================
+        // STARS
+        // =====================================================
 
-        ShowStars(stars);
+        UpdateStars(
+            score,
+            moves
+        );
+
+        // =====================================================
+        // NEXT LEVEL BUTTON
+        // =====================================================
+
+        if (nextLevelButton != null)
+        {
+            nextLevelButton.interactable = true;
+        }
+
+        // =====================================================
+        // DEBUG
+        // =====================================================
 
         Debug.Log(
-            "LEVEL COMPLETE | Score: " +
-            score +
-            " | Moves Left: " +
-            movesRemaining +
-            " | Stars: " +
-            stars
+            "===================================="
+        );
+
+        Debug.Log(
+            "LEVEL COMPLETE PANEL OPENED!"
+        );
+
+        Debug.Log(
+            "SCORE = " +
+            score
+        );
+
+        Debug.Log(
+            "MOVES LEFT = " +
+            moves
+        );
+
+        Debug.Log(
+            "GOALS = " +
+            completedGoals +
+            "/" +
+            totalGoals
+        );
+
+        Debug.Log(
+            "===================================="
         );
     }
 
     // =========================================================
-    // STAR SYSTEM
+    // CHECK GOAL
     // =========================================================
 
-    private int CalculateStars(int movesRemaining)
+    private void CheckGoal(
+        int collected,
+        int target,
+        ref int completed,
+        ref int total)
     {
-        /*
-         * Starting moves = 30
-         *
-         * 15 or more remaining = 3 Stars
-         * 8 - 14 remaining     = 2 Stars
-         * 1 - 7 remaining      = 1 Star
-         */
-
-        if (movesRemaining >= 15)
-            return 3;
-
-        if (movesRemaining >= 8)
-            return 2;
-
-        return 1;
-    }
-
-    private void ShowStars(int starCount)
-    {
-        if (star1 != null)
-            star1.SetActive(starCount >= 1);
-
-        if (star2 != null)
-            star2.SetActive(starCount >= 2);
-
-        if (star3 != null)
-            star3.SetActive(starCount >= 3);
-    }
-
-    // =========================================================
-    // NEXT LEVEL
-    // =========================================================
-
-    public void OnNextLevelClicked()
-    {
-        if (GameLevelManager.Instance == null)
+        if (target <= 0)
             return;
 
-        GameLevelManager.Instance.UnlockNextLevel();
+        total++;
 
-        int nextLevel =
-            GameLevelManager.Instance.GetCurrentLevel() + 1;
-
-        if (nextLevel > GameLevelManager.MaxLevel)
+        if (collected >= target)
         {
-            Debug.Log("ALL 30 LEVELS COMPLETED!");
+            completed++;
+        }
+    }
+
+    // =========================================================
+    // ADD GOAL PROGRESS
+    // =========================================================
+
+    private void AddGoalProgress(
+        ref string text,
+        int collected,
+        int target,
+        string colorName)
+    {
+        if (target <= 0)
+            return;
+
+        if (!string.IsNullOrEmpty(text))
+        {
+            text += "\n";
+        }
+
+        text +=
+            colorName +
+            ": " +
+            collected +
+            " / " +
+            target;
+    }
+
+    // =========================================================
+    // UPDATE STARS
+    // =========================================================
+
+    private void UpdateStars(
+        int score,
+        int moves)
+    {
+        if (stars == null ||
+            stars.Length == 0)
+        {
             return;
         }
 
-        GameLevelManager.Instance.SetCurrentLevel(nextLevel);
+        // Turn all stars OFF
+        for (
+            int i = 0;
+            i < stars.Length;
+            i++)
+        {
+            if (stars[i] != null)
+            {
+                stars[i].SetActive(false);
+            }
+        }
 
-        UnityEngine.SceneManagement.SceneManager.LoadScene(
-            UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex
-        );
-    }
+        // =====================================================
+        // STAR CALCULATION
+        // =====================================================
 
-    // =========================================================
-    // RETRY
-    // =========================================================
+        int starCount = 1;
 
-    private void OnRetryClicked()
-    {
-        Debug.Log("RETRY BUTTON CLICKED");
+        if (score >= 500)
+        {
+            starCount = 2;
+        }
 
-        // Reload current scene
-        SceneManager.LoadScene(
-            SceneManager.GetActiveScene().buildIndex
-        );
+        if (score >= 1000)
+        {
+            starCount = 3;
+        }
+
+        if (moves >= 10 &&
+            score >= 300)
+        {
+            starCount =
+                Mathf.Max(
+                    starCount,
+                    2
+                );
+        }
+
+        starCount =
+            Mathf.Clamp(
+                starCount,
+                0,
+                stars.Length
+            );
+
+        // =====================================================
+        // TURN STARS ON
+        // =====================================================
+
+        for (
+            int i = 0;
+            i < starCount;
+            i++)
+        {
+            if (stars[i] != null)
+            {
+                stars[i].SetActive(true);
+            }
+        }
     }
 
     // =========================================================
@@ -171,7 +488,175 @@ public class LevelCompleteUI : MonoBehaviour
 
     public void HidePanel()
     {
-        if (levelCompletePanel != null)
-            levelCompletePanel.SetActive(false);
+        if (levelCompletePanel == null)
+        {
+            levelCompletePanel = gameObject;
+        }
+
+        if (levelCompletePanel == null)
+            return;
+
+        isShowing = false;
+
+        // =====================================================
+        // CANVAS GROUP
+        // =====================================================
+
+        CanvasGroup canvasGroup =
+            levelCompletePanel.GetComponent<CanvasGroup>();
+
+        if (canvasGroup != null)
+        {
+            canvasGroup.alpha = 0f;
+            canvasGroup.interactable = false;
+            canvasGroup.blocksRaycasts = false;
+        }
+
+        // =====================================================
+        // STARS OFF
+        // =====================================================
+
+        if (stars != null)
+        {
+            for (
+                int i = 0;
+                i < stars.Length;
+                i++)
+            {
+                if (stars[i] != null)
+                {
+                    stars[i].SetActive(false);
+                }
+            }
+        }
+
+        // =====================================================
+        // BUTTON DISABLE
+        // =====================================================
+
+        if (nextLevelButton != null)
+        {
+            nextLevelButton.interactable = false;
+        }
+
+        // =====================================================
+        // PANEL OFF
+        // =====================================================
+
+        levelCompletePanel.SetActive(false);
+
+        Debug.Log(
+            "LEVEL COMPLETE PANEL HIDDEN"
+        );
+    }
+
+    // =========================================================
+    // NEXT LEVEL
+    // =========================================================
+
+    public void OnNextLevelClicked()
+    {
+        if (!isShowing)
+            return;
+
+        // =====================================================
+        // SOUND
+        // =====================================================
+
+        if (audioSource != null &&
+            nextLevelClickSound != null)
+        {
+            audioSource.PlayOneShot(
+                nextLevelClickSound
+            );
+        }
+
+        // =====================================================
+        // GAME LEVEL MANAGER
+        // =====================================================
+
+        if (GameLevelManager.Instance == null)
+        {
+            Debug.LogError(
+                "GameLevelManager Instance not found!"
+            );
+
+            return;
+        }
+
+        Time.timeScale = 1f;
+
+        int currentLevel =
+            GameLevelManager.Instance.GetCurrentLevel();
+
+        int nextLevel =
+            currentLevel + 1;
+
+        // =====================================================
+        // MAX LEVEL
+        // =====================================================
+
+        if (nextLevel >
+            GameLevelManager.MaxLevel)
+        {
+            Debug.Log(
+                "ALL LEVELS COMPLETED!"
+            );
+
+            HidePanel();
+
+            return;
+        }
+
+        // =====================================================
+        // UNLOCK NEXT LEVEL
+        // =====================================================
+
+        GameLevelManager.Instance.UnlockLevel(
+            nextLevel
+        );
+
+        GameLevelManager.Instance.SetCurrentLevel(
+            nextLevel
+        );
+
+        PlayerPrefs.Save();
+
+        // =====================================================
+        // HIDE PANEL
+        // =====================================================
+
+        HidePanel();
+
+        // =====================================================
+        // LOAD GAME SCENE
+        // =====================================================
+
+        SceneManager.LoadScene(
+            SceneManager.GetActiveScene().buildIndex
+        );
+    }
+
+    // =========================================================
+    // GET PANEL OBJECT
+    // =========================================================
+
+    public GameObject GetPanelObject()
+    {
+        if (levelCompletePanel == null)
+        {
+            levelCompletePanel = gameObject;
+        }
+
+        return levelCompletePanel;
+    }
+
+    // =========================================================
+    // IS SHOWING
+    // =========================================================
+
+    public bool IsShowing()
+    {
+        return isShowing;
     }
 }

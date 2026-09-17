@@ -1,0 +1,468 @@
+fileFormatVersion: 2
+guid: 35dbfc1408e9ef44fbd11cbe14f57d23
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2576471263742385453
+    second: LEVEL FAILED!_0
+  - first:
+      213: -6881662645917840955
+    second: LEVEL FAILED!_1
+  - first:
+      213: 5323874229294406006
+    second: LEVEL FAILED!_2
+  - first:
+      213: 1056955786285299260
+    second: LEVEL FAILED!_3
+  - first:
+      213: -4623830674213677394
+    second: LEVEL FAILED!_4
+  - first:
+      213: 909692655583682031
+    second: LEVEL FAILED!_5
+  - first:
+      213: 7219365004873611763
+    second: LEVEL FAILED!_6
+  - first:
+      213: -8952063160103328235
+    second: LEVEL FAILED!_7
+  - first:
+      213: 2994861192384847747
+    second: LEVEL FAILED!_8
+  - first:
+      213: -5624843050494103320
+    second: LEVEL FAILED!_9
+  - first:
+      213: 3615667194370937084
+    second: LEVEL FAILED!_10
+  - first:
+      213: -2803416087699608385
+    second: LEVEL FAILED!_11
+  - first:
+      213: -8949585864621168357
+    second: LEVEL FAILED!_12
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: 47
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 1
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: LEVEL FAILED!_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2
+        width: 83
+        height: 122
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d2ddd51b6f671c320800000000000000
+      internalID: 2576471263742385453
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LEVEL FAILED!_1
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 2
+        width: 88
+        height: 120
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c90efdb84c6f70a0800000000000000
+      internalID: -6881662645917840955
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LEVEL FAILED!_2
+      rect:
+        serializedVersion: 2
+        x: 193
+        y: 0
+        width: 117
+        height: 122
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 67913f9876332e940800000000000000
+      internalID: 5323874229294406006
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LEVEL FAILED!_3
+      rect:
+        serializedVersion: 2
+        x: 324
+        y: 2
+        width: 88
+        height: 120
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c3634d800bf0bae00800000000000000
+      internalID: 1056955786285299260
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LEVEL FAILED!_4
+      rect:
+        serializedVersion: 2
+        x: 429
+        y: 2
+        width: 84
+        height: 122
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea650f9ff7ad4dfb0800000000000000
+      internalID: -4623830674213677394
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LEVEL FAILED!_5
+      rect:
+        serializedVersion: 2
+        x: 566
+        y: 1
+        width: 88
+        height: 121
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fedd8d686a0ef9c00800000000000000
+      internalID: 909692655583682031
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LEVEL FAILED!_6
+      rect:
+        serializedVersion: 2
+        x: 654
+        y: 0
+        width: 116
+        height: 124
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f9b06bd836503460800000000000000
+      internalID: 7219365004873611763
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LEVEL FAILED!_7
+      rect:
+        serializedVersion: 2
+        x: 782
+        y: 1
+        width: 37
+        height: 122
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5162e276cf1e3c380800000000000000
+      internalID: -8952063160103328235
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LEVEL FAILED!_8
+      rect:
+        serializedVersion: 2
+        x: 841
+        y: 2
+        width: 84
+        height: 122
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 38f93b31362ef8920800000000000000
+      internalID: 2994861192384847747
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LEVEL FAILED!_9
+      rect:
+        serializedVersion: 2
+        x: 939
+        y: 2
+        width: 89
+        height: 120
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e079f91c0b80f1b0800000000000000
+      internalID: -5624843050494103320
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LEVEL FAILED!_10
+      rect:
+        serializedVersion: 2
+        x: 1045
+        y: 0
+        width: 111
+        height: 125
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cf0538a182e6d2230800000000000000
+      internalID: 3615667194370937084
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LEVEL FAILED!_11
+      rect:
+        serializedVersion: 2
+        x: 1171
+        y: 44
+        width: 37
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fbcac0fdbe34819d0800000000000000
+      internalID: -2803416087699608385
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LEVEL FAILED!_12
+      rect:
+        serializedVersion: 2
+        x: 1170
+        y: 0
+        width: 39
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b19e564b21facc380800000000000000
+      internalID: -8949585864621168357
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      LEVEL FAILED!_0: 2576471263742385453
+      LEVEL FAILED!_1: -6881662645917840955
+      LEVEL FAILED!_10: 3615667194370937084
+      LEVEL FAILED!_11: -2803416087699608385
+      LEVEL FAILED!_12: -8949585864621168357
+      LEVEL FAILED!_2: 5323874229294406006
+      LEVEL FAILED!_3: 1056955786285299260
+      LEVEL FAILED!_4: -4623830674213677394
+      LEVEL FAILED!_5: 909692655583682031
+      LEVEL FAILED!_6: 7219365004873611763
+      LEVEL FAILED!_7: -8952063160103328235
+      LEVEL FAILED!_8: 2994861192384847747
+      LEVEL FAILED!_9: -5624843050494103320
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -6,58 +6,49 @@ public class GameLevelManager : MonoBehaviour
 
     public const int MaxLevel = 30;
 
-    private const string CURRENT_LEVEL_KEY =
-        "CurrentLevel";
-
-    private const string UNLOCKED_LEVEL_KEY =
-        "UnlockedLevel";
+    private const string CURRENT_LEVEL_KEY = "CurrentLevel";
+    private const string UNLOCKED_LEVEL_KEY = "UnlockedLevel";
 
     private int currentLevel = 1;
     private int unlockedLevel = 1;
 
     private void Awake()
     {
-        if (Instance != null &&
-            Instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
 
         Instance = this;
-
         DontDestroyOnLoad(gameObject);
 
-        currentLevel =
-            PlayerPrefs.GetInt(
-                CURRENT_LEVEL_KEY,
-                1
-            );
+        currentLevel = PlayerPrefs.GetInt(
+            CURRENT_LEVEL_KEY,
+            1
+        );
 
-        unlockedLevel =
-            PlayerPrefs.GetInt(
-                UNLOCKED_LEVEL_KEY,
-                1
-            );
+        unlockedLevel = PlayerPrefs.GetInt(
+            UNLOCKED_LEVEL_KEY,
+            1
+        );
 
-        currentLevel =
-            Mathf.Clamp(
-                currentLevel,
-                1,
-                MaxLevel
-            );
+        currentLevel = Mathf.Clamp(
+            currentLevel,
+            1,
+            MaxLevel
+        );
 
-        unlockedLevel =
-            Mathf.Clamp(
-                unlockedLevel,
-                1,
-                MaxLevel
-            );
+        unlockedLevel = Mathf.Clamp(
+            unlockedLevel,
+            1,
+            MaxLevel
+        );
     }
 
-    // =========================================
+    // =====================================================
     // CURRENT LEVEL
-    // =========================================
+    // =====================================================
 
     public int GetCurrentLevel()
     {
@@ -66,12 +57,11 @@ public class GameLevelManager : MonoBehaviour
 
     public void SetCurrentLevel(int level)
     {
-        level =
-            Mathf.Clamp(
-                level,
-                1,
-                MaxLevel
-            );
+        level = Mathf.Clamp(
+            level,
+            1,
+            MaxLevel
+        );
 
         currentLevel = level;
 
@@ -81,11 +71,16 @@ public class GameLevelManager : MonoBehaviour
         );
 
         PlayerPrefs.Save();
+
+        Debug.Log(
+            "Current Level Set To: " +
+            currentLevel
+        );
     }
 
-    // =========================================
-    // UNLOCK
-    // =========================================
+    // =====================================================
+    // UNLOCKED LEVEL
+    // =====================================================
 
     public int GetUnlockedLevel()
     {
@@ -94,8 +89,7 @@ public class GameLevelManager : MonoBehaviour
 
     public void UnlockNextLevel()
     {
-        int nextLevel =
-            currentLevel + 1;
+        int nextLevel = currentLevel + 1;
 
         if (nextLevel > MaxLevel)
             return;
@@ -110,46 +104,82 @@ public class GameLevelManager : MonoBehaviour
             );
 
             PlayerPrefs.Save();
+
+            Debug.Log(
+                "Unlocked Level: " +
+                unlockedLevel
+            );
+        }
+    }
+
+    public void UnlockLevel(int level)
+    {
+        if (level < 1 || level > MaxLevel)
+            return;
+
+        if (level > unlockedLevel)
+        {
+            unlockedLevel = level;
+
+            PlayerPrefs.SetInt(
+                UNLOCKED_LEVEL_KEY,
+                unlockedLevel
+            );
+
+            PlayerPrefs.Save();
+
+            Debug.Log(
+                "Unlocked Level: " +
+                unlockedLevel
+            );
         }
     }
 
     public bool IsLevelUnlocked(int level)
     {
-        return level <= unlockedLevel;
+        return level >= 1 &&
+               level <= unlockedLevel;
     }
 
-    // =========================================
+    // =====================================================
     // LEVEL DATA
-    // =========================================
+    // =====================================================
 
     public LevelData GetLevelData(int level)
     {
-        level =
-            Mathf.Clamp(
-                level,
-                1,
-                MaxLevel
-            );
+        level = Mathf.Clamp(
+            level,
+            1,
+            MaxLevel
+        );
+
+        string path =
+            "Levels/Level_" + level;
 
         LevelData data =
-            Resources.Load<LevelData>(
-                "Levels/Level_" + level
-            );
+            Resources.Load<LevelData>(path);
 
         if (data == null)
         {
-            Debug.LogWarning(
-                "LevelData not found for Level " +
-                level
+            Debug.LogError(
+                "LevelData NOT FOUND: " +
+                path
+            );
+        }
+        else
+        {
+            Debug.Log(
+                "Loaded LevelData: " +
+                path
             );
         }
 
         return data;
     }
 
-    // =========================================
+    // =====================================================
     // MOVES
-    // =========================================
+    // =====================================================
 
     public int GetMoves(int level)
     {
@@ -162,9 +192,9 @@ public class GameLevelManager : MonoBehaviour
         return 30;
     }
 
-    // =========================================
+    // =====================================================
     // RED GOAL
-    // =========================================
+    // =====================================================
 
     public int GetRedGoal(int level)
     {
@@ -177,9 +207,9 @@ public class GameLevelManager : MonoBehaviour
         return 20;
     }
 
-    // =========================================
+    // =====================================================
     // RESET PROGRESS
-    // =========================================
+    // =====================================================
 
     public void ResetProgress()
     {
@@ -197,5 +227,9 @@ public class GameLevelManager : MonoBehaviour
         );
 
         PlayerPrefs.Save();
+
+        Debug.Log(
+            "Level Progress Reset To Level 1"
+        );
     }
 }

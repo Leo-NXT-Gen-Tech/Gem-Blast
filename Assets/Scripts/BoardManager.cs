@@ -25,37 +25,69 @@ public class BoardManager : MonoBehaviour
     [SerializeField] private float fallDuration = 0.25f;
     [SerializeField] private float swapDuration = 0.20f;
 
+    [Header("Candy Blast Effect")]
+    [SerializeField] private int blastPieces = 9;
+    [SerializeField] private float blastDuration = 0.32f;
+    [SerializeField] private float blastPieceSize = 0.18f;
+    [SerializeField] private float blastForce = 110f;
+    [SerializeField] private float blastGravity = 260f;
+    [SerializeField] private float blastRotationSpeed = 420f;
+    [SerializeField] private AudioSource matchAudioSource;
+    [SerializeField] private AudioClip matchSound;
+    [SerializeField] private AudioClip newGemDropSound;
+    [SerializeField] private AudioClip levelCompleteSound;
+    [SerializeField] private ParticleSystem winnerParticleEffect;
+
     [Header("UI")]
     [SerializeField] private TMP_Text scoreText;
     [SerializeField] private TMP_Text movesText;
     [SerializeField] private TMP_Text goalProgressText;
+    [SerializeField] private TMP_Text levelText;
 
     [Header("Game Settings")]
     [SerializeField] private int startingMoves = 30;
 
-    [Header("Goal")]
+    [Header("Goals")]
     [SerializeField] private int targetRedGems = 20;
+    [SerializeField] private int targetBlueGems = 0;
+    [SerializeField] private int targetGreenGems = 0;
+    [SerializeField] private int targetPinkGems = 0;
+    [SerializeField] private int targetPurpleGems = 0;
+    [SerializeField] private int targetOrangeGems = 0;
 
     [Header("Result Panels")]
     [SerializeField] private GameObject levelCompletePanel;
-    [SerializeField] private GameObject levelFailedPanel;
+
+    [Header("Level Complete UI")]
+    [SerializeField] private LevelCompleteUI levelCompleteUI;
+
+    [Header("Hint Sound")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip hintSound;
 
     // =========================================================
     // HINT SYSTEM
     // =========================================================
 
     [Header("Hint System")]
-    [SerializeField] private float hintDelay = 3f;
     [SerializeField] private float hintScale = 1.12f;
     [SerializeField] private float hintRotation = 6f;
     [SerializeField] private float hintAnimDuration = 0.30f;
     [SerializeField] private int hintCycles = 2;
 
     private float hintTimer = 0f;
+
     private Coroutine hintCoroutine;
+
     private GemView hintGem;
+    private GemView hintGem2;
+
     private Vector3 hintOriginalScale;
+    private Vector3 hintOriginalScale2;
+
     private Quaternion hintOriginalRotation;
+    private Quaternion hintOriginalRotation2;
+
     private bool hintShowing = false;
 
     // =========================================================
@@ -94,6 +126,7 @@ public class BoardManager : MonoBehaviour
     private bool isDestroyed = false;
     private bool levelCompleted = false;
     private bool levelFailed = false;
+    private bool isLoadingNextLevel = false;
 
     private float cellWidth;
     private float cellHeight;
@@ -101,7 +134,17 @@ public class BoardManager : MonoBehaviour
 
     private int score = 0;
     private int moves;
+
+    // =========================================================
+    // COLLECTED GOALS
+    // =========================================================
+
     private int redGemsCollected = 0;
+    private int blueGemsCollected = 0;
+    private int greenGemsCollected = 0;
+    private int pinkGemsCollected = 0;
+    private int purpleGemsCollected = 0;
+    private int orangeGemsCollected = 0;
 
     // =========================================================
     // UPDATE
@@ -109,64 +152,8 @@ public class BoardManager : MonoBehaviour
 
     private void Update()
     {
-        if (isDestroyed)
-            return;
-
-        if (isProcessing)
-        {
-            hintTimer = 0f;
-            return;
-        }
-
-        if (levelCompleted || levelFailed)
-        {
-            hintTimer = 0f;
-            return;
-        }
-
-        if (moves <= 0)
-        {
-            hintTimer = 0f;
-            return;
-        }
-
-        if (hintShowing)
-            return;
-
-        hintTimer += Time.deltaTime;
-
-        if (hintTimer >= hintDelay)
-        {
-            HintMove validMove;
-
-            bool foundMove =
-                FindValidHintMove(out validMove);
-
-            if (foundMove)
-            {
-                GemView gem =
-                    GetGemView(
-                        validMove.row1,
-                        validMove.column1
-                    );
-
-                if (gem != null)
-                {
-                    hintCoroutine =
-                        StartCoroutine(
-                            PlayHintAnimation(gem)
-                        );
-                }
-                else
-                {
-                    hintTimer = 0f;
-                }
-            }
-            else
-            {
-                hintTimer = 0f;
-            }
-        }
+    if (isDestroyed)
+        return;
     }
 
     // =========================================================
@@ -180,6 +167,24 @@ public class BoardManager : MonoBehaviour
 
         Time.timeScale = 1f;
 
+        // =====================================================
+        // AUTO FIND LEVEL COMPLETE UI
+        // =====================================================
+
+        AutoFindLevelCompleteUI();
+
+        if (matchAudioSource == null)
+        {
+            matchAudioSource =
+                GetComponent<AudioSource>();
+
+            if (matchAudioSource == null)
+            {
+                matchAudioSource =
+                    gameObject.AddComponent<AudioSource>();
+            }
+        }
+
         int currentLevel = 1;
 
         if (GameLevelManager.Instance != null)
@@ -192,37 +197,143 @@ public class BoardManager : MonoBehaviour
                     currentLevel
                 );
 
-            targetRedGems =
-                GameLevelManager.Instance.GetRedGoal(
+            LevelData startLevelData =
+                GameLevelManager.Instance.GetLevelData(
                     currentLevel
                 );
+
+            if (startLevelData != null)
+            {
+                targetRedGems =
+                    Mathf.Max(
+                        0,
+                        startLevelData.redGoal
+                    );
+
+                targetBlueGems =
+                    Mathf.Max(
+                        0,
+                        startLevelData.blueGoal
+                    );
+
+                targetGreenGems =
+                    Mathf.Max(
+                        0,
+                        startLevelData.greenGoal
+                    );
+
+                targetPinkGems =
+                    Mathf.Max(
+                        0,
+                        startLevelData.pinkGoal
+                    );
+
+                targetPurpleGems =
+                    Mathf.Max(
+                        0,
+                        startLevelData.purpleGoal
+                    );
+
+                targetOrangeGems =
+                    Mathf.Max(
+                        0,
+                        startLevelData.orangeGoal
+                    );
+            }
         }
 
-        Debug.Log("====================================");
-        Debug.Log("START LEVEL: " + currentLevel);
-        Debug.Log("MOVES: " + startingMoves);
-        Debug.Log("RED GOAL: " + targetRedGems);
+        Debug.Log(
+            "===================================="
+        );
+
+        Debug.Log(
+            "START LEVEL: " +
+            currentLevel
+        );
+
+        Debug.Log(
+            "MOVES: " +
+            startingMoves
+        );
+
+        Debug.Log(
+            "RED GOAL: " +
+            targetRedGems
+        );
+
+        Debug.Log(
+            "BLUE GOAL: " +
+            targetBlueGems
+        );
+
+        Debug.Log(
+            "GREEN GOAL: " +
+            targetGreenGems
+        );
+
+        Debug.Log(
+            "PINK GOAL: " +
+            targetPinkGems
+        );
+
+        Debug.Log(
+            "PURPLE GOAL: " +
+            targetPurpleGems
+        );
+
+        Debug.Log(
+            "ORANGE GOAL: " +
+            targetOrangeGems
+        );
 
         moves = startingMoves;
         score = 0;
+
         redGemsCollected = 0;
+        blueGemsCollected = 0;
+        greenGemsCollected = 0;
+        pinkGemsCollected = 0;
+        purpleGemsCollected = 0;
+        orangeGemsCollected = 0;
 
         levelCompleted = false;
         levelFailed = false;
+        isLoadingNextLevel = false;
 
         hintTimer = 0f;
         hintShowing = false;
         hintGem = null;
         hintCoroutine = null;
 
-        if (levelCompletePanel != null)
-            levelCompletePanel.SetActive(false);
+        // =====================================================
+        // HIDE COMPLETE PANEL AT START
+        // =====================================================
 
-        if (levelFailedPanel != null)
-            levelFailedPanel.SetActive(false);
+        if (levelCompleteUI != null)
+        {
+            levelCompleteUI.HidePanel();
+        }
+        else if (levelCompletePanel != null)
+        {
+            levelCompletePanel.SetActive(false);
+        }
+
+        if (winnerParticleEffect != null)
+        {
+            winnerParticleEffect.Stop(
+                true,
+                ParticleSystemStopBehavior.StopEmittingAndClear
+            );
+
+            winnerParticleEffect.gameObject.SetActive(
+                false
+            );
+        }
 
         bool savedLevelLoaded =
-            LoadSavedLevel(currentLevel);
+            LoadSavedLevel(
+                currentLevel
+            );
 
         if (!savedLevelLoaded)
         {
@@ -243,7 +354,47 @@ public class BoardManager : MonoBehaviour
             columns
         );
 
-        Debug.Log("====================================");
+        Debug.Log(
+            "===================================="
+        );
+    }
+
+    // =========================================================
+    // AUTO FIND LEVEL COMPLETE UI
+    // =========================================================
+
+    private void AutoFindLevelCompleteUI()
+    {
+        if (levelCompleteUI == null)
+        {
+            levelCompleteUI =
+                FindFirstObjectByType<LevelCompleteUI>(
+                    FindObjectsInactive.Include
+                );
+        }
+
+        if (
+            levelCompletePanel == null &&
+            levelCompleteUI != null
+        )
+        {
+            levelCompletePanel =
+                levelCompleteUI.GetPanelObject();
+        }
+
+        if (levelCompleteUI == null)
+        {
+            Debug.LogWarning(
+                "LevelCompleteUI could not be found automatically."
+            );
+        }
+
+        if (levelCompletePanel == null)
+        {
+            Debug.LogWarning(
+                "Level Complete Panel could not be found automatically."
+            );
+        }
     }
 
     // =========================================================
@@ -253,7 +404,86 @@ public class BoardManager : MonoBehaviour
     private void OnDestroy()
     {
         isDestroyed = true;
+
         StopAllCoroutines();
+    }
+
+    // =========================================================
+    // TEST WIN
+    // =========================================================
+
+    [ContextMenu("TEST WIN LEVEL")]
+    public void TestWinLevel()
+    {
+        if (isDestroyed)
+            return;
+
+        if (levelCompleted)
+            return;
+
+        Debug.Log(
+            "===================================="
+        );
+
+        Debug.Log(
+            "TEST WIN LEVEL ACTIVATED"
+        );
+
+        // =====================================================
+        // COMPLETE ALL ACTIVE GOALS
+        // =====================================================
+
+        if (targetRedGems > 0)
+        {
+            redGemsCollected =
+                targetRedGems;
+        }
+
+        if (targetBlueGems > 0)
+        {
+            blueGemsCollected =
+                targetBlueGems;
+        }
+
+        if (targetGreenGems > 0)
+        {
+            greenGemsCollected =
+                targetGreenGems;
+        }
+
+        if (targetPinkGems > 0)
+        {
+            pinkGemsCollected =
+                targetPinkGems;
+        }
+
+        if (targetPurpleGems > 0)
+        {
+            purpleGemsCollected =
+                targetPurpleGems;
+        }
+
+        if (targetOrangeGems > 0)
+        {
+            orangeGemsCollected =
+                targetOrangeGems;
+        }
+
+        UpdateUI();
+
+        // =====================================================
+        // OPEN LEVEL COMPLETE
+        // =====================================================
+
+        ShowLevelComplete();
+
+        Debug.Log(
+            "TEST WIN COMPLETE"
+        );
+
+        Debug.Log(
+            "===================================="
+        );
     }
 
     // =========================================================
@@ -262,8 +492,17 @@ public class BoardManager : MonoBehaviour
 
     private void InitializeBoard()
     {
-        rows = Mathf.Max(1, rows);
-        columns = Mathf.Max(1, columns);
+        rows =
+            Mathf.Max(
+                1,
+                rows
+            );
+
+        columns =
+            Mathf.Max(
+                1,
+                columns
+            );
 
         board =
             new GemType[
@@ -283,12 +522,27 @@ public class BoardManager : MonoBehaviour
                 columns
             ];
 
-        for (int row = 0; row < rows; row++)
+        for (
+            int row = 0;
+            row < rows;
+            row++
+        )
         {
-            for (int column = 0; column < columns; column++)
+            for (
+                int column = 0;
+                column < columns;
+                column++
+            )
             {
-                activeCells[row, column] = true;
-                board[row, column] = GemType.Red;
+                activeCells[
+                    row,
+                    column
+                ] = true;
+
+                board[
+                    row,
+                    column
+                ] = GemType.Red;
             }
         }
     }
@@ -299,14 +553,19 @@ public class BoardManager : MonoBehaviour
 
     private GemType GetRandomGem()
     {
-        return (GemType)Random.Range(0, 6);
+        return (GemType)Random.Range(
+            0,
+            6
+        );
     }
 
     // =========================================================
     // GET GEM PREFAB
     // =========================================================
 
-    private GameObject GetGemPrefab(GemType type)
+    private GameObject GetGemPrefab(
+        GemType type
+    )
     {
         switch (type)
         {
@@ -336,10 +595,14 @@ public class BoardManager : MonoBehaviour
     // GET GEM SPRITE
     // =========================================================
 
-    private Sprite GetGemSprite(GemType type)
+    private Sprite GetGemSprite(
+        GemType type
+    )
     {
         GameObject prefab =
-            GetGemPrefab(type);
+            GetGemPrefab(
+                type
+            );
 
         if (prefab == null)
         {
@@ -352,7 +615,9 @@ public class BoardManager : MonoBehaviour
         }
 
         Image image =
-            prefab.GetComponentInChildren<Image>(true);
+            prefab.GetComponentInChildren<Image>(
+                true
+            );
 
         if (image == null)
         {
@@ -373,17 +638,38 @@ public class BoardManager : MonoBehaviour
 
     private void GenerateRandomBoard()
     {
-        for (int row = 0; row < rows; row++)
+        for (
+            int row = 0;
+            row < rows;
+            row++
+        )
         {
-            for (int column = 0; column < columns; column++)
+            for (
+                int column = 0;
+                column < columns;
+                column++
+            )
             {
-                if (!activeCells[row, column])
+                if (
+                    !activeCells[
+                        row,
+                        column
+                    ]
+                )
                 {
-                    board[row, column] = GemType.Red;
+                    board[
+                        row,
+                        column
+                    ] =
+                        GemType.Red;
+
                     continue;
                 }
 
-                board[row, column] =
+                board[
+                    row,
+                    column
+                ] =
                     GetRandomGem();
             }
         }
@@ -400,7 +686,9 @@ public class BoardManager : MonoBehaviour
     // LOAD LEVEL
     // =========================================================
 
-    private bool LoadSavedLevel(int level)
+    private bool LoadSavedLevel(
+        int level
+    )
     {
         if (GameLevelManager.Instance == null)
         {
@@ -412,7 +700,9 @@ public class BoardManager : MonoBehaviour
         }
 
         LevelData levelData =
-            GameLevelManager.Instance.GetLevelData(level);
+            GameLevelManager.Instance.GetLevelData(
+                level
+            );
 
         if (levelData == null)
         {
@@ -439,19 +729,59 @@ public class BoardManager : MonoBehaviour
 
         InitializeBoard();
 
-        levelData.Initialize();
-
-        for (int row = 0; row < rows; row++)
+        if (
+            levelData.gems == null ||
+            levelData.activeCells == null
+        )
         {
-            for (int column = 0; column < columns; column++)
+            Debug.LogWarning(
+                "LevelData arrays are missing."
+            );
+
+            return false;
+        }
+
+        int expectedSize =
+            rows *
+            columns;
+
+        if (
+            levelData.gems.Length != expectedSize ||
+            levelData.activeCells.Length != expectedSize
+        )
+        {
+            Debug.LogWarning(
+                "LevelData array size does not match board size."
+            );
+
+            return false;
+        }
+
+        for (
+            int row = 0;
+            row < rows;
+            row++
+        )
+        {
+            for (
+                int column = 0;
+                column < columns;
+                column++
+            )
             {
-                board[row, column] =
+                board[
+                    row,
+                    column
+                ] =
                     levelData.GetGem(
                         row,
                         column
                     );
 
-                activeCells[row, column] =
+                activeCells[
+                    row,
+                    column
+                ] =
                     levelData.IsValidCell(
                         row,
                         column
@@ -459,21 +789,11 @@ public class BoardManager : MonoBehaviour
             }
         }
 
-        Debug.Log("====================================");
         Debug.Log(
             "LEVEL " +
             level +
             " LOADED FROM LEVEL DATA"
         );
-
-        Debug.Log(
-            "BOARD SIZE: " +
-            rows +
-            " x " +
-            columns
-        );
-
-        Debug.Log("====================================");
 
         return true;
     }
@@ -482,7 +802,9 @@ public class BoardManager : MonoBehaviour
     // GEM SHORT NAME
     // =========================================================
 
-    private string GetGemShortName(GemType type)
+    private string GetGemShortName(
+        GemType type
+    )
     {
         switch (type)
         {
@@ -553,25 +875,43 @@ public class BoardManager : MonoBehaviour
             panelRect.rect.height;
 
         cellWidth =
-            panelWidth / columns;
+            panelWidth /
+            columns;
 
         cellHeight =
-            panelHeight / rows;
+            panelHeight /
+            rows;
 
         gemSize =
             Mathf.Min(
                 cellWidth,
                 cellHeight
-            ) * 0.85f;
+            ) *
+            0.85f;
 
         int createdCount = 0;
 
-        for (int row = 0; row < rows; row++)
+        for (
+            int row = 0;
+            row < rows;
+            row++
+        )
         {
-            for (int column = 0; column < columns; column++)
+            for (
+                int column = 0;
+                column < columns;
+                column++
+            )
             {
-                if (!activeCells[row, column])
+                if (
+                    !activeCells[
+                        row,
+                        column
+                    ]
+                )
+                {
                     continue;
+                }
 
                 GemView gem =
                     CreateGem(
@@ -605,14 +945,24 @@ public class BoardManager : MonoBehaviour
         if (isDestroyed)
             return null;
 
-        if (!IsActiveCell(row, column))
+        if (!IsActiveCell(
+                row,
+                column
+            ))
+        {
             return null;
+        }
 
         GemType currentType =
-            board[row, column];
+            board[
+                row,
+                column
+            ];
 
         GameObject selectedPrefab =
-            GetGemPrefab(currentType);
+            GetGemPrefab(
+                currentType
+            );
 
         if (selectedPrefab == null)
         {
@@ -636,13 +986,22 @@ public class BoardManager : MonoBehaviour
         if (gemRect != null)
         {
             gemRect.anchorMin =
-                new Vector2(0.5f, 0.5f);
+                new Vector2(
+                    0.5f,
+                    0.5f
+                );
 
             gemRect.anchorMax =
-                new Vector2(0.5f, 0.5f);
+                new Vector2(
+                    0.5f,
+                    0.5f
+                );
 
             gemRect.pivot =
-                new Vector2(0.5f, 0.5f);
+                new Vector2(
+                    0.5f,
+                    0.5f
+                );
 
             gemRect.sizeDelta =
                 new Vector2(
@@ -676,7 +1035,9 @@ public class BoardManager : MonoBehaviour
                 selectedPrefab.name
             );
 
-            Destroy(gemObject);
+            Destroy(
+                gemObject
+            );
 
             return null;
         }
@@ -688,16 +1049,25 @@ public class BoardManager : MonoBehaviour
         );
 
         Sprite sprite =
-            GetGemSprite(currentType);
+            GetGemSprite(
+                currentType
+            );
 
         if (sprite != null)
         {
-            gemView.SetGemSprite(sprite);
+            gemView.SetGemSprite(
+                sprite
+            );
         }
 
-        gemView.SetBoardManager(this);
+        gemView.SetBoardManager(
+            this
+        );
 
-        gemViews[row, column] =
+        gemViews[
+            row,
+            column
+        ] =
             gemView;
 
         return gemView;
@@ -716,15 +1086,20 @@ public class BoardManager : MonoBehaviour
             (
                 column -
                 (columns - 1) / 2f
-            ) * cellWidth;
+            ) *
+            cellWidth;
 
         float y =
             (
                 row -
                 (rows - 1) / 2f
-            ) * cellHeight;
+            ) *
+            cellHeight;
 
-        return new Vector2(x, y);
+        return new Vector2(
+            x,
+            y
+        );
     }
 
     // =========================================================
@@ -785,9 +1160,12 @@ public class BoardManager : MonoBehaviour
             targetRow--;
         }
 
-        if (!IsActiveCell(
+        if (
+            !IsActiveCell(
                 targetRow,
-                targetColumn))
+                targetColumn
+            )
+        )
         {
             return;
         }
@@ -815,31 +1193,44 @@ public class BoardManager : MonoBehaviour
 
     private void StopHint()
     {
-        hintTimer = 0f;
+    hintTimer = 0f;
 
-        if (hintCoroutine != null)
-        {
-            StopCoroutine(
-                hintCoroutine
-            );
+    if (hintCoroutine != null)
+    {
+        StopCoroutine(
+            hintCoroutine
+        );
 
-            hintCoroutine = null;
-        }
+        hintCoroutine = null;
+    }
 
-        if (hintGem != null)
-        {
-            Transform hintTransform =
-                hintGem.transform;
+    if (hintGem != null)
+    {
+        Transform hintTransform =
+            hintGem.transform;
 
-            hintTransform.localScale =
-                hintOriginalScale;
+        hintTransform.localScale =
+            hintOriginalScale;
 
-            hintTransform.localRotation =
-                hintOriginalRotation;
-        }
+        hintTransform.localRotation =
+            hintOriginalRotation;
+    }
 
-        hintGem = null;
-        hintShowing = false;
+    if (hintGem2 != null)
+    {
+        Transform hintTransform2 =
+            hintGem2.transform;
+
+        hintTransform2.localScale =
+            hintOriginalScale2;
+
+        hintTransform2.localRotation =
+            hintOriginalRotation2;
+    }
+
+    hintGem = null;
+    hintGem2 = null;
+    hintShowing = false;
     }
 
     // =========================================================
@@ -850,7 +1241,8 @@ public class BoardManager : MonoBehaviour
         out HintMove validMove
     )
     {
-        validMove = new HintMove();
+        validMove =
+            new HintMove();
 
         if (
             board == null ||
@@ -860,12 +1252,25 @@ public class BoardManager : MonoBehaviour
             return false;
         }
 
-        for (int row = 0; row < rows; row++)
+        for (
+            int row = 0;
+            row < rows;
+            row++
+        )
         {
-            for (int column = 0; column < columns; column++)
+            for (
+                int column = 0;
+                column < columns;
+                column++
+            )
             {
-                if (!IsActiveCell(row, column))
+                if (!IsActiveCell(
+                        row,
+                        column
+                    ))
+                {
                     continue;
+                }
 
                 if (
                     gemViews[
@@ -971,20 +1376,6 @@ public class BoardManager : MonoBehaviour
             return false;
         }
 
-        if (
-            gemViews[
-                row1,
-                column1
-            ] == null ||
-            gemViews[
-                row2,
-                column2
-            ] == null
-        )
-        {
-            return false;
-        }
-
         GemType type1 =
             board[
                 row1,
@@ -1000,12 +1391,14 @@ public class BoardManager : MonoBehaviour
         board[
             row1,
             column1
-        ] = type2;
+        ] =
+            type2;
 
         board[
             row2,
             column2
-        ] = type1;
+        ] =
+            type1;
 
         List<Vector2Int> matches =
             FindAllMatches();
@@ -1017,12 +1410,14 @@ public class BoardManager : MonoBehaviour
         board[
             row1,
             column1
-        ] = type1;
+        ] =
+            type1;
 
         board[
             row2,
             column2
-        ] = type2;
+        ] =
+            type2;
 
         return createsMatch;
     }
@@ -1059,173 +1454,96 @@ public class BoardManager : MonoBehaviour
     // HINT ANIMATION
     // =========================================================
 
-    private IEnumerator PlayHintAnimation(
-        GemView gem
+    private IEnumerator AnimateHintPair(
+    GemView gem1,
+    GemView gem2,
+    Image image1,
+    Image image2,
+    Color originalColor1,
+    Color originalColor2
     )
     {
-        if (gem == null)
-            yield break;
+    float timer = 0f;
 
-        hintShowing = true;
-        hintGem = gem;
-
-        Transform target =
-            gem.transform;
-
-        hintOriginalScale =
-            target.localScale;
-
-        hintOriginalRotation =
-            target.localRotation;
-
-        for (
-            int cycle = 0;
-            cycle < hintCycles;
-            cycle++
-        )
-        {
-            if (isDestroyed)
-                yield break;
-
-            if (gem == null)
-                yield break;
-
-            yield return StartCoroutine(
-                AnimateHint(
-                    target,
-                    hintOriginalScale,
-                    hintOriginalScale * hintScale,
-                    hintOriginalRotation,
-                    Quaternion.Euler(
-                        0f,
-                        0f,
-                        hintRotation
-                    )
-                )
-            );
-
-            if (gem == null)
-                yield break;
-
-            yield return StartCoroutine(
-                AnimateHint(
-                    target,
-                    hintOriginalScale * hintScale,
-                    hintOriginalScale,
-                    Quaternion.Euler(
-                        0f,
-                        0f,
-                        hintRotation
-                    ),
-                    Quaternion.Euler(
-                        0f,
-                        0f,
-                        -hintRotation
-                    )
-                )
-            );
-
-            if (gem == null)
-                yield break;
-
-            yield return StartCoroutine(
-                AnimateHint(
-                    target,
-                    hintOriginalScale,
-                    hintOriginalScale,
-                    Quaternion.Euler(
-                        0f,
-                        0f,
-                        -hintRotation
-                    ),
-                    hintOriginalRotation
-                )
-            );
-        }
-
-        if (gem != null)
-        {
-            target.localScale =
-                hintOriginalScale;
-
-            target.localRotation =
-                hintOriginalRotation;
-        }
-
-        hintGem = null;
-        hintShowing = false;
-        hintCoroutine = null;
-        hintTimer = 0f;
-    }
-
-    // =========================================================
-    // HINT ANIMATION HELPER
-    // =========================================================
-
-    private IEnumerator AnimateHint(
-        Transform target,
-        Vector3 startScale,
-        Vector3 endScale,
-        Quaternion startRotation,
-        Quaternion endRotation
+    while (
+        timer < hintAnimDuration
     )
     {
-        if (target == null)
+        if (isDestroyed)
             yield break;
 
-        float timer = 0f;
+        timer += Time.deltaTime;
 
-        while (
-            timer <
-            hintAnimDuration
-        )
+        float t =
+            Mathf.Clamp01(
+                timer /
+                hintAnimDuration
+            );
+
+        float smooth =
+            Mathf.Sin(
+                t * Mathf.PI
+            );
+
+        float scale =
+            Mathf.Lerp(
+                1f,
+                hintScale,
+                smooth
+            );
+
+        float rotation =
+            smooth *
+            hintRotation;
+
+        gem1.transform.localScale =
+            hintOriginalScale *
+            scale;
+
+        gem2.transform.localScale =
+            hintOriginalScale2 *
+            scale;
+
+        gem1.transform.localRotation =
+            hintOriginalRotation *
+            Quaternion.Euler(
+                0f,
+                0f,
+                rotation
+            );
+
+        gem2.transform.localRotation =
+            hintOriginalRotation2 *
+            Quaternion.Euler(
+                0f,
+                0f,
+                -rotation
+            );
+
+        bool blinkRed =
+            Mathf.Sin(
+                timer * 22f
+            ) > 0f;
+
+        if (image1 != null)
         {
-            if (isDestroyed)
-                yield break;
-
-            if (target == null)
-                yield break;
-
-            timer += Time.deltaTime;
-
-            float t =
-                Mathf.Clamp01(
-                    timer /
-                    hintAnimDuration
-                );
-
-            t =
-                t *
-                t *
-                (3f - 2f * t);
-
-            target.localScale =
-                Vector3.Lerp(
-                    startScale,
-                    endScale,
-                    t
-                );
-
-            target.localRotation =
-                Quaternion.Lerp(
-                    startRotation,
-                    endRotation,
-                    t
-                );
-
-            yield return null;
+            image1.color =
+                blinkRed
+                ? Color.red
+                : originalColor1;
         }
 
-        if (target != null)
+        if (image2 != null)
         {
-            target.localScale =
-                endScale;
-
-            target.localRotation =
-                endRotation;
+            image2.color =
+                blinkRed
+                ? Color.red
+                : originalColor2;
         }
+
+        yield return null;
     }
-
+   }
     // =========================================================
     // SWAP AND PROCESS
     // =========================================================
@@ -1235,17 +1553,15 @@ public class BoardManager : MonoBehaviour
         GemView gem2
     )
     {
-        if (isDestroyed)
-            yield break;
-
-        if (isProcessing)
-            yield break;
-
         if (
+            isDestroyed ||
+            isProcessing ||
             gem1 == null ||
             gem2 == null
         )
+        {
             yield break;
+        }
 
         StopHint();
 
@@ -1315,22 +1631,26 @@ public class BoardManager : MonoBehaviour
         board[
             row1,
             column1
-        ] = type2;
+        ] =
+            type2;
 
         board[
             row2,
             column2
-        ] = type1;
+        ] =
+            type1;
 
         gemViews[
             row1,
             column1
-        ] = gem2;
+        ] =
+            gem2;
 
         gemViews[
             row2,
             column2
-        ] = gem1;
+        ] =
+            gem1;
 
         gem1.SetGridPosition(
             row2,
@@ -1343,11 +1663,13 @@ public class BoardManager : MonoBehaviour
         );
 
         gem1.SetColor(type2);
+
         gem1.SetGemSprite(
             GetGemSprite(type2)
         );
 
         gem2.SetColor(type1);
+
         gem2.SetGemSprite(
             GetGemSprite(type1)
         );
@@ -1371,11 +1693,6 @@ public class BoardManager : MonoBehaviour
 
         if (matches.Count > 0)
         {
-            Debug.Log(
-                "MATCH FOUND: " +
-                matches.Count
-            );
-
             int points;
 
             if (matches.Count == 3)
@@ -1388,34 +1705,36 @@ public class BoardManager : MonoBehaviour
             AddScore(points);
 
             yield return StartCoroutine(
-                RemoveAndFill(matches)
+                RemoveAndFill(
+                    matches
+                )
             );
         }
         else
         {
-            Debug.Log(
-                "NO MATCH FOUND - SWAPPING BACK!"
-            );
-
             board[
                 row1,
                 column1
-            ] = type1;
+            ] =
+                type1;
 
             board[
                 row2,
                 column2
-            ] = type2;
+            ] =
+                type2;
 
             gemViews[
                 row1,
                 column1
-            ] = gem1;
+            ] =
+                gem1;
 
             gemViews[
                 row2,
                 column2
-            ] = gem2;
+            ] =
+                gem2;
 
             gem1.SetGridPosition(
                 row1,
@@ -1428,11 +1747,13 @@ public class BoardManager : MonoBehaviour
             );
 
             gem1.SetColor(type1);
+
             gem1.SetGemSprite(
                 GetGemSprite(type1)
             );
 
             gem2.SetColor(type2);
+
             gem2.SetGemSprite(
                 GetGemSprite(type2)
             );
@@ -1547,14 +1868,28 @@ public class BoardManager : MonoBehaviour
         List<Vector2Int> matches =
             new List<Vector2Int>();
 
+        // =====================================================
         // HORIZONTAL
-        for (int row = 0; row < rows; row++)
+        // =====================================================
+
+        for (
+            int row = 0;
+            row < rows;
+            row++
+        )
         {
             int column = 0;
 
-            while (column < columns)
+            while (
+                column < columns
+            )
             {
-                if (!IsActiveCell(row, column))
+                if (
+                    !IsActiveCell(
+                        row,
+                        column
+                    )
+                )
                 {
                     column++;
                     continue;
@@ -1603,16 +1938,25 @@ public class BoardManager : MonoBehaviour
                                 c
                             );
 
-                        if (!matches.Contains(position))
+                        if (
+                            !matches.Contains(
+                                position
+                            )
+                        )
                         {
-                            matches.Add(position);
+                            matches.Add(
+                                position
+                            );
                         }
                     }
                 }
             }
         }
 
+        // =====================================================
         // VERTICAL
+        // =====================================================
+
         for (
             int column = 0;
             column < columns;
@@ -1621,9 +1965,16 @@ public class BoardManager : MonoBehaviour
         {
             int row = 0;
 
-            while (row < rows)
+            while (
+                row < rows
+            )
             {
-                if (!IsActiveCell(row, column))
+                if (
+                    !IsActiveCell(
+                        row,
+                        column
+                    )
+                )
                 {
                     row++;
                     continue;
@@ -1672,9 +2023,15 @@ public class BoardManager : MonoBehaviour
                                 column
                             );
 
-                        if (!matches.Contains(position))
+                        if (
+                            !matches.Contains(
+                                position
+                            )
+                        )
                         {
-                            matches.Add(position);
+                            matches.Add(
+                                position
+                            );
                         }
                     }
                 }
@@ -1696,62 +2053,84 @@ public class BoardManager : MonoBehaviour
             yield break;
 
         int redCountThisMatch = 0;
+        int blueCountThisMatch = 0;
+        int greenCountThisMatch = 0;
+        int pinkCountThisMatch = 0;
+        int purpleCountThisMatch = 0;
+        int orangeCountThisMatch = 0;
 
         foreach (
             Vector2Int position
             in matches
         )
         {
-            int row = position.x;
-            int column = position.y;
+            int row =
+                position.x;
+
+            int column =
+                position.y;
 
             if (
-                IsActiveCell(row, column) &&
-                board[row, column] ==
-                GemType.Red
+                !IsActiveCell(
+                    row,
+                    column
+                )
             )
             {
-                redCountThisMatch++;
+                continue;
+            }
+
+            switch (
+                board[
+                    row,
+                    column
+                ]
+            )
+            {
+                case GemType.Red:
+                    redCountThisMatch++;
+                    break;
+
+                case GemType.Blue:
+                    blueCountThisMatch++;
+                    break;
+
+                case GemType.Green:
+                    greenCountThisMatch++;
+                    break;
+
+                case GemType.Pink:
+                    pinkCountThisMatch++;
+                    break;
+
+                case GemType.Purple:
+                    purpleCountThisMatch++;
+                    break;
+
+                case GemType.Orange:
+                    orangeCountThisMatch++;
+                    break;
             }
         }
 
-        if (redCountThisMatch > 0)
-        {
-            AddRedGemsCollected(
-                redCountThisMatch
-            );
-        }
+        AddCollectedGems(
+            redCountThisMatch,
+            blueCountThisMatch,
+            greenCountThisMatch,
+            pinkCountThisMatch,
+            purpleCountThisMatch,
+            orangeCountThisMatch
+        );
 
-        foreach (
-            Vector2Int position
-            in matches
-        )
-        {
-            int row = position.x;
-            int column = position.y;
-
-            if (
-                gemViews[
-                    row,
-                    column
-                ] != null
+        yield return StartCoroutine(
+            BlastMatchedGems(
+                matches
             )
-            {
-                Destroy(
-                    gemViews[
-                        row,
-                        column
-                    ].gameObject
-                );
+        );
 
-                gemViews[
-                    row,
-                    column
-                ] = null;
-            }
-        }
-
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(
+            0.05f
+        );
 
         for (
             int column = 0;
@@ -1763,7 +2142,9 @@ public class BoardManager : MonoBehaviour
                 yield break;
 
             yield return StartCoroutine(
-                CollapseColumn(column)
+                CollapseColumn(
+                    column
+                )
             );
         }
 
@@ -1774,12 +2155,14 @@ public class BoardManager : MonoBehaviour
         if (isDestroyed)
             yield break;
 
-        if (
-            redGemsCollected >=
-            targetRedGems
-        )
+        // =====================================================
+        // AUTOMATIC LEVEL COMPLETE
+        // =====================================================
+
+        if (AreAllGoalsCompleted())
         {
             ShowLevelComplete();
+
             yield break;
         }
 
@@ -1797,41 +2180,210 @@ public class BoardManager : MonoBehaviour
             else
                 chainPoints = 100;
 
-            AddScore(chainPoints);
+            AddScore(
+                chainPoints
+            );
 
             yield return StartCoroutine(
-                RemoveAndFill(newMatches)
+                RemoveAndFill(
+                    newMatches
+                )
             );
         }
     }
 
     // =========================================================
-    // RED GEMS
+    // ADD COLLECTED GEMS
     // =========================================================
 
-    private void AddRedGemsCollected(
-        int amount
+    private void AddCollectedGems(
+        int red,
+        int blue,
+        int green,
+        int pink,
+        int purple,
+        int orange
     )
     {
-        redGemsCollected += amount;
+        redGemsCollected += red;
+        blueGemsCollected += blue;
+        greenGemsCollected += green;
+        pinkGemsCollected += pink;
+        purpleGemsCollected += purple;
+        orangeGemsCollected += orange;
 
-        if (
-            redGemsCollected >
-            targetRedGems
-        )
+        if (targetRedGems > 0)
         {
             redGemsCollected =
-                targetRedGems;
+                Mathf.Min(
+                    redGemsCollected,
+                    targetRedGems
+                );
+        }
+
+        if (targetBlueGems > 0)
+        {
+            blueGemsCollected =
+                Mathf.Min(
+                    blueGemsCollected,
+                    targetBlueGems
+                );
+        }
+
+        if (targetGreenGems > 0)
+        {
+            greenGemsCollected =
+                Mathf.Min(
+                    greenGemsCollected,
+                    targetGreenGems
+                );
+        }
+
+        if (targetPinkGems > 0)
+        {
+            pinkGemsCollected =
+                Mathf.Min(
+                    pinkGemsCollected,
+                    targetPinkGems
+                );
+        }
+
+        if (targetPurpleGems > 0)
+        {
+            purpleGemsCollected =
+                Mathf.Min(
+                    purpleGemsCollected,
+                    targetPurpleGems
+                );
+        }
+
+        if (targetOrangeGems > 0)
+        {
+            orangeGemsCollected =
+                Mathf.Min(
+                    orangeGemsCollected,
+                    targetOrangeGems
+                );
         }
 
         UpdateUI();
 
         Debug.Log(
-            "RED GEMS COLLECTED: " +
+            "GOALS | " +
+            "RED " +
             redGemsCollected +
-            " / " +
-            targetRedGems
+            "/" +
+            targetRedGems +
+            " | BLUE " +
+            blueGemsCollected +
+            "/" +
+            targetBlueGems +
+            " | GREEN " +
+            greenGemsCollected +
+            "/" +
+            targetGreenGems +
+            " | PINK " +
+            pinkGemsCollected +
+            "/" +
+            targetPinkGems +
+            " | PURPLE " +
+            purpleGemsCollected +
+            "/" +
+            targetPurpleGems +
+            " | ORANGE " +
+            orangeGemsCollected +
+            "/" +
+            targetOrangeGems
         );
+    }
+
+    // =========================================================
+    // ALL GOALS COMPLETED
+    // =========================================================
+
+    private bool AreAllGoalsCompleted()
+    {
+        bool hasGoal = false;
+
+        if (targetRedGems > 0)
+        {
+            hasGoal = true;
+
+            if (
+                redGemsCollected <
+                targetRedGems
+            )
+            {
+                return false;
+            }
+        }
+
+        if (targetBlueGems > 0)
+        {
+            hasGoal = true;
+
+            if (
+                blueGemsCollected <
+                targetBlueGems
+            )
+            {
+                return false;
+            }
+        }
+
+        if (targetGreenGems > 0)
+        {
+            hasGoal = true;
+
+            if (
+                greenGemsCollected <
+                targetGreenGems
+            )
+            {
+                return false;
+            }
+        }
+
+        if (targetPinkGems > 0)
+        {
+            hasGoal = true;
+
+            if (
+                pinkGemsCollected <
+                targetPinkGems
+            )
+            {
+                return false;
+            }
+        }
+
+        if (targetPurpleGems > 0)
+        {
+            hasGoal = true;
+
+            if (
+                purpleGemsCollected <
+                targetPurpleGems
+            )
+            {
+                return false;
+            }
+        }
+
+        if (targetOrangeGems > 0)
+        {
+            hasGoal = true;
+
+            if (
+                orangeGemsCollected <
+                targetOrangeGems
+            )
+            {
+                return false;
+            }
+        }
+
+        return hasGoal;
     }
 
     // =========================================================
@@ -1847,7 +2399,9 @@ public class BoardManager : MonoBehaviour
 
         int row = 0;
 
-        while (row < rows)
+        while (
+            row < rows
+        )
         {
             while (
                 row < rows &&
@@ -1863,7 +2417,8 @@ public class BoardManager : MonoBehaviour
             if (row >= rows)
                 break;
 
-            int segmentStart = row;
+            int segmentStart =
+                row;
 
             while (
                 row < rows &&
@@ -1967,8 +2522,11 @@ public class BoardManager : MonoBehaviour
             int targetRow =
                 segmentStart + i;
 
-            newViews[i] = gem;
-            newTypes[i] = type;
+            newViews[i] =
+                gem;
+
+            newTypes[i] =
+                type;
 
             if (gem != null)
             {
@@ -1990,7 +2548,8 @@ public class BoardManager : MonoBehaviour
         )
         {
             int arrayIndex =
-                existingCount + i;
+                existingCount +
+                i;
 
             int targetRow =
                 segmentStart +
@@ -1999,13 +2558,16 @@ public class BoardManager : MonoBehaviour
             GemType newType =
                 GetRandomGem();
 
-            newTypes[arrayIndex] =
+            newTypes[
+                arrayIndex
+            ] =
                 newType;
 
             board[
                 targetRow,
                 column
-            ] = newType;
+            ] =
+                newType;
 
             GemView newGem =
                 CreateGem(
@@ -2014,7 +2576,9 @@ public class BoardManager : MonoBehaviour
                     true
                 );
 
-            newViews[arrayIndex] =
+            newViews[
+                arrayIndex
+            ] =
                 newGem;
         }
 
@@ -2025,7 +2589,8 @@ public class BoardManager : MonoBehaviour
         )
         {
             int targetRow =
-                segmentStart + i;
+                segmentStart +
+                i;
 
             board[
                 targetRow,
@@ -2040,6 +2605,17 @@ public class BoardManager : MonoBehaviour
                 newViews[i];
         }
 
+        if (
+            newGemCount > 0 &&
+            matchAudioSource != null &&
+            newGemDropSound != null
+        )
+        {
+            matchAudioSource.PlayOneShot(
+                newGemDropSound
+            );
+        }
+
         for (
             int i = 0;
             i < segmentSize;
@@ -2047,7 +2623,8 @@ public class BoardManager : MonoBehaviour
         )
         {
             int targetRow =
-                segmentStart + i;
+                segmentStart +
+                i;
 
             GemView gem =
                 newViews[i];
@@ -2137,7 +2714,9 @@ public class BoardManager : MonoBehaviour
     // SCORE
     // =========================================================
 
-    private void AddScore(int amount)
+    private void AddScore(
+        int amount
+    )
     {
         score += amount;
 
@@ -2147,6 +2726,312 @@ public class BoardManager : MonoBehaviour
             "Score: " +
             score
         );
+    }
+
+    // =========================================================
+    // BLAST PIECE
+    // =========================================================
+
+    private class BlastPiece
+    {
+        public RectTransform rect;
+        public CanvasGroup canvasGroup;
+        public Vector2 velocity;
+        public float rotationSpeed;
+        public float startScale;
+    }
+
+    // =========================================================
+    // BLAST MATCHED GEMS
+    // =========================================================
+
+    private IEnumerator BlastMatchedGems(
+        List<Vector2Int> matches
+    )
+    {
+        if (isDestroyed)
+            yield break;
+
+        List<BlastPiece> pieces =
+            new List<BlastPiece>();
+
+        List<GameObject> originalGems =
+            new List<GameObject>();
+
+        foreach (
+            Vector2Int position
+            in matches
+        )
+        {
+            int row =
+                position.x;
+
+            int column =
+                position.y;
+
+            if (
+                !IsActiveCell(
+                    row,
+                    column
+                )
+            )
+            {
+                continue;
+            }
+
+            GemView gem =
+                gemViews[
+                    row,
+                    column
+                ];
+
+            if (gem == null)
+                continue;
+
+            GameObject gemObject =
+                gem.gameObject;
+
+            originalGems.Add(
+                gemObject
+            );
+
+            Image sourceImage =
+                gemObject.GetComponentInChildren<Image>();
+
+            if (
+                sourceImage == null ||
+                sourceImage.sprite == null
+            )
+            {
+                gemViews[
+                    row,
+                    column
+                ] = null;
+
+                continue;
+            }
+
+            RectTransform sourceRect =
+                sourceImage.rectTransform;
+
+            for (
+                int i = 0;
+                i < blastPieces;
+                i++
+            )
+            {
+                GameObject pieceObject =
+                    new GameObject(
+                        "GemBlastPiece",
+                        typeof(RectTransform),
+                        typeof(Image),
+                        typeof(CanvasGroup)
+                    );
+
+                pieceObject.transform.SetParent(
+                    sourceRect.parent,
+                    false
+                );
+
+                RectTransform pieceRect =
+                    pieceObject.GetComponent<RectTransform>();
+
+                Image pieceImage =
+                    pieceObject.GetComponent<Image>();
+
+                CanvasGroup pieceCanvas =
+                    pieceObject.GetComponent<CanvasGroup>();
+
+                pieceImage.sprite =
+                    sourceImage.sprite;
+
+                pieceImage.preserveAspect =
+                    true;
+
+                pieceImage.raycastTarget =
+                    false;
+
+                pieceCanvas.alpha =
+                    1f;
+
+                pieceRect.position =
+                    sourceRect.position;
+
+                pieceRect.sizeDelta =
+                    sourceRect.sizeDelta;
+
+                float scale =
+                    Random.Range(
+                        blastPieceSize * 0.65f,
+                        blastPieceSize * 1.15f
+                    );
+
+                pieceRect.localScale =
+                    Vector3.one *
+                    scale;
+
+                pieceRect.SetAsLastSibling();
+
+                Vector2 direction =
+                    Random.insideUnitCircle.normalized;
+
+                if (
+                    direction.sqrMagnitude <
+                    0.01f
+                )
+                {
+                    direction =
+                        Vector2.up;
+                }
+
+                float force =
+                    Random.Range(
+                        blastForce * 0.65f,
+                        blastForce * 1.25f
+                    );
+
+                pieces.Add(
+                    new BlastPiece
+                    {
+                        rect = pieceRect,
+                        canvasGroup = pieceCanvas,
+                        velocity =
+                            direction *
+                            force,
+                        rotationSpeed =
+                            Random.Range(
+                                -blastRotationSpeed,
+                                blastRotationSpeed
+                            ),
+                        startScale =
+                            scale
+                    }
+                );
+            }
+
+            CanvasGroup originalCanvas =
+                gemObject.GetComponent<CanvasGroup>();
+
+            if (originalCanvas == null)
+            {
+                originalCanvas =
+                    gemObject.AddComponent<CanvasGroup>();
+            }
+
+            originalCanvas.alpha =
+                0f;
+
+            gemViews[
+                row,
+                column
+            ] = null;
+        }
+
+        if (
+            matchAudioSource != null &&
+            matchSound != null
+        )
+        {
+            matchAudioSource.PlayOneShot(
+                matchSound
+            );
+        }
+
+        float elapsed = 0f;
+
+        while (
+            elapsed <
+            blastDuration
+        )
+        {
+            if (isDestroyed)
+                yield break;
+
+            float dt =
+                Time.deltaTime;
+
+            elapsed += dt;
+
+            foreach (
+                BlastPiece piece
+                in pieces
+            )
+            {
+                if (piece.rect == null)
+                    continue;
+
+                piece.velocity.y -=
+                    blastGravity * dt;
+
+                piece.rect.position +=
+                    (Vector3)(
+                        piece.velocity *
+                        dt
+                    );
+
+                piece.rect.Rotate(
+                    0f,
+                    0f,
+                    piece.rotationSpeed *
+                    dt
+                );
+
+                float progress =
+                    Mathf.Clamp01(
+                        elapsed /
+                        blastDuration
+                    );
+
+                if (
+                    piece.canvasGroup != null
+                )
+                {
+                    piece.canvasGroup.alpha =
+                        1f -
+                        progress;
+                }
+
+                float scaleMultiplier =
+                    Mathf.Lerp(
+                        1f,
+                        0.25f,
+                        progress
+                    );
+
+                piece.rect.localScale =
+                    Vector3.one *
+                    piece.startScale *
+                    scaleMultiplier;
+            }
+
+            yield return null;
+        }
+
+        foreach (
+            BlastPiece piece
+            in pieces
+        )
+        {
+            if (piece.rect != null)
+            {
+                Destroy(
+                    piece.rect.gameObject
+                );
+            }
+        }
+
+        foreach (
+            GameObject gemObject
+            in originalGems
+        )
+        {
+            if (gemObject != null)
+            {
+                Destroy(
+                    gemObject
+                );
+            }
+        }
     }
 
     // =========================================================
@@ -2171,10 +3056,84 @@ public class BoardManager : MonoBehaviour
 
         if (goalProgressText != null)
         {
+            List<string> progress =
+                new List<string>();
+
+            if (targetRedGems > 0)
+            {
+                progress.Add(
+                    redGemsCollected +
+                    " / " +
+                    targetRedGems +
+                    " RED GEMS"
+                );
+            }
+
+            if (targetBlueGems > 0)
+            {
+                progress.Add(
+                    blueGemsCollected +
+                    " / " +
+                    targetBlueGems +
+                    " BLUE GEMS"
+                );
+            }
+
+            if (targetGreenGems > 0)
+            {
+                progress.Add(
+                    greenGemsCollected +
+                    " / " +
+                    targetGreenGems +
+                    " GREEN GEMS"
+                );
+            }
+
+            if (targetPinkGems > 0)
+            {
+                progress.Add(
+                    pinkGemsCollected +
+                    " / " +
+                    targetPinkGems +
+                    " PINK GEMS"
+                );
+            }
+
+            if (targetPurpleGems > 0)
+            {
+                progress.Add(
+                    purpleGemsCollected +
+                    " / " +
+                    targetPurpleGems +
+                    " PURPLE GEMS"
+                );
+            }
+
+            if (targetOrangeGems > 0)
+            {
+                progress.Add(
+                    orangeGemsCollected +
+                    " / " +
+                    targetOrangeGems +
+                    " ORANGE GEMS"
+                );
+            }
+
             goalProgressText.text =
-                redGemsCollected +
-                " / " +
-                targetRedGems;
+                string.Join(
+                    "\n",
+                    progress
+                );
+        }
+
+        if (
+            levelText != null &&
+            GameLevelManager.Instance != null
+        )
+        {
+            levelText.text =
+                "LEVEL " +
+                GameLevelManager.Instance.GetCurrentLevel();
         }
     }
 
@@ -2189,16 +3148,122 @@ public class BoardManager : MonoBehaviour
 
         levelCompleted = true;
 
+        isProcessing = false;
+
         StopHint();
 
-        Debug.Log(
-            "LEVEL COMPLETE! RED GOAL COMPLETED!"
-        );
+        // =====================================================
+        // AUTO FIND UI
+        // =====================================================
+
+        AutoFindLevelCompleteUI();
+
+        // =====================================================
+        // FORCE OPEN PANEL
+        // =====================================================
 
         if (levelCompletePanel != null)
         {
-            levelCompletePanel.SetActive(true);
+            levelCompletePanel.SetActive(
+                true
+            );
+
+            // Bring it to front
+            if (
+                levelCompletePanel.transform.parent != null
+            )
+            {
+                levelCompletePanel.transform.SetAsLastSibling();
+            }
+
+            Debug.Log(
+                "LEVEL COMPLETE PANEL ACTIVATED!"
+            );
         }
+        else
+        {
+            Debug.LogError(
+                "LEVEL COMPLETE PANEL NOT FOUND!"
+            );
+        }
+
+        // =====================================================
+        // SHOW LEVEL COMPLETE UI
+        // =====================================================
+
+        if (levelCompleteUI != null)
+        {
+            levelCompleteUI.ShowLevelComplete(
+                score,
+                moves,
+
+                redGemsCollected,
+                targetRedGems,
+
+                blueGemsCollected,
+                targetBlueGems,
+
+                greenGemsCollected,
+                targetGreenGems,
+
+                pinkGemsCollected,
+                targetPinkGems,
+
+                purpleGemsCollected,
+                targetPurpleGems,
+
+                orangeGemsCollected,
+                targetOrangeGems
+            );
+
+            Debug.Log(
+                "LEVEL COMPLETE UI SHOW CALLED!"
+            );
+        }
+        else
+        {
+            Debug.LogError(
+                "LEVEL COMPLETE UI NOT FOUND!"
+            );
+        }
+
+        // =====================================================
+        // SOUND
+        // =====================================================
+
+        if (
+            matchAudioSource != null &&
+            levelCompleteSound != null
+        )
+        {
+            matchAudioSource.PlayOneShot(
+                levelCompleteSound
+            );
+        }
+
+        // =====================================================
+        // WINNER PARTICLE
+        // =====================================================
+
+        if (winnerParticleEffect != null)
+        {
+            winnerParticleEffect.gameObject.SetActive(
+                true
+            );
+
+            winnerParticleEffect.Stop(
+                true,
+                ParticleSystemStopBehavior.StopEmittingAndClear
+            );
+
+            winnerParticleEffect.Play(
+                true
+            );
+        }
+
+        Debug.Log(
+            "===================================="
+        );
     }
 
     // =========================================================
@@ -2210,13 +3275,8 @@ public class BoardManager : MonoBehaviour
         if (levelFailed)
             return;
 
-        if (
-            redGemsCollected >=
-            targetRedGems
-        )
-        {
+        if (AreAllGoalsCompleted())
             return;
-        }
 
         levelFailed = true;
 
@@ -2226,37 +3286,66 @@ public class BoardManager : MonoBehaviour
             "LEVEL FAILED! MOVES FINISHED!"
         );
 
-        if (levelFailedPanel != null)
+        if (levelCompletePanel != null)
         {
-            levelFailedPanel.SetActive(true);
+            levelCompletePanel.SetActive(
+                false
+            );
+        }
+
+        if (winnerParticleEffect != null)
+        {
+            winnerParticleEffect.Stop(
+                true,
+                ParticleSystemStopBehavior.StopEmittingAndClear
+            );
+
+            winnerParticleEffect.gameObject.SetActive(
+                false
+            );
+        }
+
+        FailPanel failPanel =
+            FindFirstObjectByType<FailPanel>(
+                FindObjectsInactive.Include
+            );
+
+        if (failPanel != null)
+        {
+            failPanel.Show(
+                score,
+
+                redGemsCollected,
+                targetRedGems,
+
+                blueGemsCollected,
+                targetBlueGems,
+
+                greenGemsCollected,
+                targetGreenGems,
+
+                pinkGemsCollected,
+                targetPinkGems,
+
+                purpleGemsCollected,
+                targetPurpleGems,
+
+                orangeGemsCollected,
+                targetOrangeGems,
+
+                startingMoves - moves
+            );
+        }
+        else
+        {
+            Debug.LogWarning(
+                "FailPanel not found in scene."
+            );
         }
     }
 
     // =========================================================
-    // RETRY
-    // =========================================================
-
-    public void RetryLevel()
-    {
-        if (isDestroyed)
-            return;
-
-        Time.timeScale = 1f;
-
-        Debug.Log(
-            "RETRY CURRENT LEVEL"
-        );
-
-        Scene currentScene =
-            SceneManager.GetActiveScene();
-
-        SceneManager.LoadScene(
-            currentScene.buildIndex
-        );
-    }
-
-    // =========================================================
-    // NEXT LEVEL - FIXED
+    // NEXT LEVEL
     // =========================================================
 
     public void NextLevel()
@@ -2264,10 +3353,8 @@ public class BoardManager : MonoBehaviour
         if (isDestroyed)
             return;
 
-        Time.timeScale = 1f;
-
-        Debug.Log("====================================");
-        Debug.Log("NEXT LEVEL BUTTON CLICKED");
+        if (isLoadingNextLevel)
+            return;
 
         if (GameLevelManager.Instance == null)
         {
@@ -2278,25 +3365,13 @@ public class BoardManager : MonoBehaviour
             return;
         }
 
+        Time.timeScale = 1f;
+
         int currentLevel =
             GameLevelManager.Instance.GetCurrentLevel();
 
         int nextLevel =
             currentLevel + 1;
-
-        Debug.Log(
-            "CURRENT LEVEL = " +
-            currentLevel
-        );
-
-        Debug.Log(
-            "NEXT LEVEL = " +
-            nextLevel
-        );
-
-        // -----------------------------------------------------
-        // CHECK MAX LEVEL
-        // -----------------------------------------------------
 
         if (
             nextLevel >
@@ -2307,56 +3382,25 @@ public class BoardManager : MonoBehaviour
                 "ALL LEVELS COMPLETED!"
             );
 
-            Debug.Log("====================================");
-
             return;
         }
 
-        // -----------------------------------------------------
-        // IMPORTANT
-        // UNLOCK FIRST
-        // THEN SET CURRENT LEVEL
-        // -----------------------------------------------------
+        isLoadingNextLevel = true;
 
-        GameLevelManager.Instance.UnlockNextLevel();
+        GameLevelManager.Instance.UnlockLevel(
+            nextLevel
+        );
 
         GameLevelManager.Instance.SetCurrentLevel(
             nextLevel
         );
 
-        // -----------------------------------------------------
-        // VERIFY CURRENT LEVEL
-        // -----------------------------------------------------
-
-        int savedLevel =
-            GameLevelManager.Instance.GetCurrentLevel();
-
-        Debug.Log(
-            "CURRENT LEVEL AFTER SAVE = " +
-            savedLevel
-        );
-
-        // -----------------------------------------------------
-        // SAVE PLAYER PREFS
-        // -----------------------------------------------------
-
         PlayerPrefs.Save();
 
         Debug.Log(
-            "LEVEL " +
-            nextLevel +
-            " SAVED SUCCESSFULLY"
+            "NEXT LEVEL = " +
+            GameLevelManager.Instance.GetCurrentLevel()
         );
-
-        Debug.Log(
-            "LOADING GAME SCENE..."
-        );
-
-        Debug.Log("====================================");
-
-        // -----------------------------------------------------
-        // LOAD SAME GAME SCENE
-        // -----------------------------------------------------
 
         SceneManager.LoadScene(
             SceneManager.GetActiveScene().buildIndex
@@ -2364,14 +3408,592 @@ public class BoardManager : MonoBehaviour
     }
 
     // =========================================================
-    // MAIN MENU
+    // EXTRA MOVE
     // =========================================================
 
-    public void MainMenu()
+    public bool AddExtraMove()
     {
-        Time.timeScale = 1f;
+        if (
+            isDestroyed ||
+            levelCompleted ||
+            levelFailed
+        )
+        {
+            return false;
+        }
 
-        SceneManager.LoadScene(0);
+        moves++;
+
+        UpdateUI();
+
+        Debug.Log(
+            "EXTRA MOVE ADDED = " +
+            moves
+        );
+
+        return true;
+    }
+
+    // =========================================================
+    // SHUFFLE
+    // =========================================================
+
+    public bool ShuffleBoard()
+    {
+        if (
+            isDestroyed ||
+            isProcessing ||
+            levelCompleted ||
+            levelFailed
+        )
+        {
+            return false;
+        }
+
+        if (
+            board == null ||
+            gemViews == null
+        )
+        {
+            return false;
+        }
+
+        List<Vector2Int> positions =
+            new List<Vector2Int>();
+
+        List<GemType> types =
+            new List<GemType>();
+
+        for (
+            int row = 0;
+            row < rows;
+            row++
+        )
+        {
+            for (
+                int column = 0;
+                column < columns;
+                column++
+            )
+            {
+                if (
+                    !IsActiveCell(
+                        row,
+                        column
+                    )
+                )
+                {
+                    continue;
+                }
+
+                if (
+                    gemViews[
+                        row,
+                        column
+                    ] == null
+                )
+                {
+                    continue;
+                }
+
+                positions.Add(
+                    new Vector2Int(
+                        row,
+                        column
+                    )
+                );
+
+                types.Add(
+                    board[
+                        row,
+                        column
+                    ]
+                );
+            }
+        }
+
+        if (positions.Count < 2)
+            return false;
+
+        for (
+            int i = types.Count - 1;
+            i > 0;
+            i--
+        )
+        {
+            int randomIndex =
+                Random.Range(
+                    0,
+                    i + 1
+                );
+
+            GemType temp =
+                types[i];
+
+            types[i] =
+                types[
+                    randomIndex
+                ];
+
+            types[
+                randomIndex
+            ] =
+                temp;
+        }
+
+        for (
+            int i = 0;
+            i < positions.Count;
+            i++
+        )
+        {
+            int row =
+                positions[i].x;
+
+            int column =
+                positions[i].y;
+
+            GemType type =
+                types[i];
+
+            board[
+                row,
+                column
+            ] =
+                type;
+
+            GemView gem =
+                gemViews[
+                    row,
+                    column
+                ];
+
+            if (gem != null)
+            {
+                gem.SetColor(
+                    type
+                );
+
+                Sprite sprite =
+                    GetGemSprite(
+                        type
+                    );
+
+                if (sprite != null)
+                {
+                    gem.SetGemSprite(
+                        sprite
+                    );
+                }
+            }
+        }
+
+        StopHint();
+
+        hintTimer = 0f;
+
+        UpdateUI();
+
+        return true;
+    }
+
+    // =========================================================
+    // HAMMER
+    // =========================================================
+
+    public bool UseHammer(
+        GemView gem
+    )
+    {
+        if (
+            isDestroyed ||
+            isProcessing ||
+            levelCompleted ||
+            levelFailed
+        )
+        {
+            return false;
+        }
+
+        if (gem == null)
+            return false;
+
+        int row =
+            gem.GetRow();
+
+        int column =
+            gem.GetColumn();
+
+        if (
+            !IsActiveCell(
+                row,
+                column
+            )
+        )
+        {
+            return false;
+        }
+
+        List<Vector2Int> cells =
+            new List<Vector2Int>();
+
+        cells.Add(
+            new Vector2Int(
+                row,
+                column
+            )
+        );
+
+        StartCoroutine(
+            PowerUpRemoveCells(
+                cells
+            )
+        );
+
+        return true;
+    }
+
+    // =========================================================
+    // BOMB
+    // =========================================================
+
+    public bool UseBomb(
+        GemView gem
+    )
+    {
+        if (
+            isDestroyed ||
+            isProcessing ||
+            levelCompleted ||
+            levelFailed
+        )
+        {
+            return false;
+        }
+
+        if (gem == null)
+            return false;
+
+        int centerRow =
+            gem.GetRow();
+
+        int centerColumn =
+            gem.GetColumn();
+
+        if (
+            !IsActiveCell(
+                centerRow,
+                centerColumn
+            )
+        )
+        {
+            return false;
+        }
+
+        List<Vector2Int> cells =
+            new List<Vector2Int>();
+
+        for (
+            int row = centerRow - 1;
+            row <= centerRow + 1;
+            row++
+        )
+        {
+            for (
+                int column = centerColumn - 1;
+                column <= centerColumn + 1;
+                column++
+            )
+            {
+                if (
+                    !IsActiveCell(
+                        row,
+                        column
+                    )
+                )
+                {
+                    continue;
+                }
+
+                Vector2Int position =
+                    new Vector2Int(
+                        row,
+                        column
+                    );
+
+                if (
+                    !cells.Contains(
+                        position
+                    )
+                )
+                {
+                    cells.Add(
+                        position
+                    );
+                }
+            }
+        }
+
+        if (cells.Count == 0)
+            return false;
+
+        StartCoroutine(
+            PowerUpRemoveCells(
+                cells
+            )
+        );
+
+        return true;
+    }
+
+    // =========================================================
+    // POWER UP REMOVE CELLS
+    // =========================================================
+
+    private IEnumerator PowerUpRemoveCells(
+        List<Vector2Int> cells
+    )
+    {
+        if (
+            isDestroyed ||
+            cells == null ||
+            cells.Count == 0
+        )
+        {
+            yield break;
+        }
+
+        isProcessing = true;
+
+        StopHint();
+
+        int redCount = 0;
+        int blueCount = 0;
+        int greenCount = 0;
+        int pinkCount = 0;
+        int purpleCount = 0;
+        int orangeCount = 0;
+
+        List<GameObject> objectsToDestroy =
+            new List<GameObject>();
+
+        foreach (
+            Vector2Int position
+            in cells
+        )
+        {
+            int row =
+                position.x;
+
+            int column =
+                position.y;
+
+            if (
+                !IsActiveCell(
+                    row,
+                    column
+                )
+            )
+            {
+                continue;
+            }
+
+            switch (
+                board[
+                    row,
+                    column
+                ]
+            )
+            {
+                case GemType.Red:
+                    redCount++;
+                    break;
+
+                case GemType.Blue:
+                    blueCount++;
+                    break;
+
+                case GemType.Green:
+                    greenCount++;
+                    break;
+
+                case GemType.Pink:
+                    pinkCount++;
+                    break;
+
+                case GemType.Purple:
+                    purpleCount++;
+                    break;
+
+                case GemType.Orange:
+                    orangeCount++;
+                    break;
+            }
+
+            GemView gem =
+                gemViews[
+                    row,
+                    column
+                ];
+
+            if (gem != null)
+            {
+                objectsToDestroy.Add(
+                    gem.gameObject
+                );
+
+                gemViews[
+                    row,
+                    column
+                ] = null;
+            }
+        }
+
+        AddCollectedGems(
+            redCount,
+            blueCount,
+            greenCount,
+            pinkCount,
+            purpleCount,
+            orangeCount
+        );
+
+        if (
+            matchAudioSource != null &&
+            matchSound != null
+        )
+        {
+            matchAudioSource.PlayOneShot(
+                matchSound
+            );
+        }
+
+        yield return new WaitForSeconds(
+            0.05f
+        );
+
+        foreach (
+            Vector2Int position
+            in cells
+        )
+        {
+            int row =
+                position.x;
+
+            int column =
+                position.y;
+
+            if (
+                !IsValidCell(
+                    row,
+                    column
+                )
+            )
+            {
+                continue;
+            }
+
+            board[
+                row,
+                column
+            ] =
+                GemType.Red;
+        }
+
+        foreach (
+            GameObject gemObject
+            in objectsToDestroy
+        )
+        {
+            if (gemObject != null)
+            {
+                Destroy(
+                    gemObject
+                );
+            }
+        }
+
+        yield return new WaitForSeconds(
+            0.05f
+        );
+
+        for (
+            int column = 0;
+            column < columns;
+            column++
+        )
+        {
+            if (isDestroyed)
+                yield break;
+
+            yield return StartCoroutine(
+                CollapseColumn(
+                    column
+                )
+            );
+        }
+
+        yield return new WaitForSeconds(
+            fallDuration
+        );
+
+        if (isDestroyed)
+            yield break;
+
+        // =====================================================
+        // AUTOMATIC LEVEL COMPLETE
+        // =====================================================
+
+        if (AreAllGoalsCompleted())
+        {
+            isProcessing = false;
+
+            ShowLevelComplete();
+
+            yield break;
+        }
+
+        List<Vector2Int> newMatches =
+            FindAllMatches();
+
+        if (
+            newMatches != null &&
+            newMatches.Count >= 3
+        )
+        {
+            int points;
+
+            if (newMatches.Count == 3)
+                points = 30;
+            else if (newMatches.Count == 4)
+                points = 50;
+            else
+                points = 100;
+
+            AddScore(
+                points
+            );
+
+            yield return StartCoroutine(
+                RemoveAndFill(
+                    newMatches
+                )
+            );
+        }
+
+        if (
+            !levelCompleted &&
+            moves <= 0
+        )
+        {
+            ShowLevelFailed();
+        }
+
+        UpdateUI();
+
+        hintTimer = 0f;
+
+        isProcessing = false;
     }
 
     // =========================================================
@@ -2393,12 +4015,42 @@ public class BoardManager : MonoBehaviour
     }
 
     // =========================================================
-    // GET RED GEMS
+    // GET COLLECTED GOALS
     // =========================================================
 
     public int GetRedGemsCollected()
     {
         return redGemsCollected;
+    }
+
+    public int GetBlueGemsCollected()
+    {
+        return blueGemsCollected;
+    }
+
+    public int GetGreenGemsCollected()
+    {
+        return greenGemsCollected;
+    }
+
+    public int GetPinkGemsCollected()
+    {
+        return pinkGemsCollected;
+    }
+
+    public int GetPurpleGemsCollected()
+    {
+        return purpleGemsCollected;
+    }
+
+    public int GetOrangeGemsCollected()
+    {
+        return orangeGemsCollected;
+    }
+
+    public bool AreGoalsCompleted()
+    {
+        return AreAllGoalsCompleted();
     }
 
     // =========================================================
@@ -2449,7 +4101,8 @@ public class BoardManager : MonoBehaviour
         board[
             row,
             column
-        ] = gemType;
+        ] =
+            gemType;
 
         if (
             gemViews[
@@ -2568,7 +4221,8 @@ public class BoardManager : MonoBehaviour
                     ]
                 )
                 {
-                    boardText += "X ";
+                    boardText +=
+                        "X ";
                 }
                 else
                 {
@@ -2586,6 +4240,108 @@ public class BoardManager : MonoBehaviour
             boardText += "\n";
         }
 
-        Debug.Log(boardText);
+        Debug.Log(
+            boardText
+        );
+    }
+    // HINT BUTTON
+
+    public void OnHintButtonClicked()
+    {
+    if (audioSource != null && hintSound != null)
+    {
+         audioSource.PlayOneShot(hintSound);
+    }
+
+    if (isDestroyed || isProcessing || levelCompleted || levelFailed)
+        return;
+
+    if (moves <= 0)
+        return;
+
+    if (hintShowing)
+        return;
+
+    HintMove validMove;
+
+    if (!FindValidHintMove(out validMove))
+        return;
+
+    GemView gem1 = GetGemView(
+        validMove.row1,
+        validMove.column1
+    );
+
+    GemView gem2 = GetGemView(
+        validMove.row2,
+        validMove.column2
+    );
+
+    if (gem1 == null || gem2 == null)
+        return;
+
+    StopHint();
+
+    hintCoroutine = StartCoroutine(
+        PlayHintAnimation(gem1, gem2)
+    );
+    }
+    
+    private IEnumerator PlayHintAnimation(GemView gem1, GemView gem2)
+    {
+    if (gem1 == null || gem2 == null)
+        yield break;
+
+    Image image1 = gem1.GetComponent<Image>();
+    Image image2 = gem2.GetComponent<Image>();
+
+    Color originalColor1 = image1 != null ? image1.color : Color.white;
+    Color originalColor2 = image2 != null ? image2.color : Color.white;
+
+    Vector3 scale1 = gem1.transform.localScale;
+    Vector3 scale2 = gem2.transform.localScale;
+
+    for (int i = 0; i < 2; i++)
+    {
+        float timer = 0f;
+
+        while (timer < 0.6f)
+        {
+            timer += Time.deltaTime;
+
+            float t = timer / 0.6f;
+
+            float scale = Mathf.Lerp(
+                1f,
+                1.15f,
+                Mathf.Sin(t * Mathf.PI)
+            );
+
+            gem1.transform.localScale = scale1 * scale;
+            gem2.transform.localScale = scale2 * scale;
+
+            bool blink = Mathf.Sin(timer * 30f) > 0f;
+
+            Color hintColor1 = Color.yellow;
+            Color hintColor2 = Color.cyan;
+
+            if (image1 != null)
+            image1.color = blink ? hintColor1 : originalColor1;
+
+            if (image2 != null)
+            image2.color = blink ? hintColor2 : originalColor2;
+
+            yield return null;
+        }
+    }
+
+    gem1.transform.localScale = scale1;
+    gem2.transform.localScale = scale2;
+
+    if (image1 != null)
+        image1.color = originalColor1;
+
+    if (image2 != null)
+        image2.color = originalColor2;
     }
 }
