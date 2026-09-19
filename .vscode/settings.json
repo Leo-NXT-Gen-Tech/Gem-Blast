@@ -67,5 +67,5 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "Gem_Blast.slnx"
+    "dotnet.defaultSolution": "Gem-Blast.slnx"
 }
