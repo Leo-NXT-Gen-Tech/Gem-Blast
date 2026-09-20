@@ -211,7 +211,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7270800659693831830, guid: 499356d470cd5d547b037c1575bcaa42, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -327,16 +328,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7270800659693831830, guid: 7f9efb424fe4451429cbdcc0bdc8ea5c, type: 3}
+    - {fileID: 627784532392600324, guid: 7f9efb424fe4451429cbdcc0bdc8ea5c, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5720054848446274202, guid: 7f9efb424fe4451429cbdcc0bdc8ea5c, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 819467133}
+      addedObject: {fileID: 819467134}
     - targetCorrespondingSourceObject: {fileID: 5720054848446274202, guid: 7f9efb424fe4451429cbdcc0bdc8ea5c, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 819467134}
+      addedObject: {fileID: 819467135}
   m_SourcePrefab: {fileID: 100100000, guid: 7f9efb424fe4451429cbdcc0bdc8ea5c, type: 3}
 --- !u!224 &141035564 stripped
 RectTransform:
@@ -447,7 +450,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7270800659693831830, guid: 7f9efb424fe4451429cbdcc0bdc8ea5c, type: 3}
+    - {fileID: 627784532392600324, guid: 7f9efb424fe4451429cbdcc0bdc8ea5c, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -563,6 +568,9 @@ MonoBehaviour:
   moveDuration: 1.2
   rotationSpeed: 25
   delay: 0
+  bgMusicSource: {fileID: 0}
+  bgMusic: {fileID: 0}
+  playButtonClickSound: {fileID: 0}
 --- !u!114 &238366169
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -579,6 +587,9 @@ MonoBehaviour:
   moveDuration: 1.2
   rotationSpeed: 25
   delay: 0
+  bgMusicSource: {fileID: 0}
+  bgMusic: {fileID: 0}
+  playButtonClickSound: {fileID: 0}
 --- !u!1 &292227611 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5720054848446274202, guid: 7c3de68974fb1f64d873d5c1fda8748e, type: 3}
@@ -605,6 +616,9 @@ MonoBehaviour:
   moveDuration: 1.2
   rotationSpeed: 25
   delay: 0
+  bgMusicSource: {fileID: 0}
+  bgMusic: {fileID: 0}
+  playButtonClickSound: {fileID: 0}
 --- !u!114 &292227616
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -621,6 +635,9 @@ MonoBehaviour:
   moveDuration: 1.2
   rotationSpeed: 25
   delay: 0
+  bgMusicSource: {fileID: 0}
+  bgMusic: {fileID: 0}
+  playButtonClickSound: {fileID: 0}
 --- !u!1001 &357180765
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -725,7 +742,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7270800659693831830, guid: 7c3de68974fb1f64d873d5c1fda8748e, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -840,7 +858,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7270800659693831830, guid: 7f9efb424fe4451429cbdcc0bdc8ea5c, type: 3}
+    - {fileID: 627784532392600324, guid: 7f9efb424fe4451429cbdcc0bdc8ea5c, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -949,7 +969,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7270800659693831830, guid: dd53c5611ce5135418e482024d44294c, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -1061,7 +1082,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7270800659693831830, guid: 7c3de68974fb1f64d873d5c1fda8748e, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -1274,7 +1296,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7270800659693831830, guid: 656cde3e79dfccc40806b2da3de865a7, type: 3}
+    - {fileID: 627784532392600324, guid: 656cde3e79dfccc40806b2da3de865a7, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -1308,6 +1332,9 @@ MonoBehaviour:
   moveDuration: 1.2
   rotationSpeed: 25
   delay: 0
+  bgMusicSource: {fileID: 0}
+  bgMusic: {fileID: 0}
+  playButtonClickSound: {fileID: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1471,6 +1498,9 @@ MonoBehaviour:
   moveDuration: 1.2
   rotationSpeed: 25
   delay: 0
+  bgMusicSource: {fileID: 0}
+  bgMusic: {fileID: 0}
+  playButtonClickSound: {fileID: 0}
 --- !u!114 &521048536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1487,6 +1517,9 @@ MonoBehaviour:
   moveDuration: 1.2
   rotationSpeed: 25
   delay: 0
+  bgMusicSource: {fileID: 0}
+  bgMusic: {fileID: 0}
+  playButtonClickSound: {fileID: 0}
 --- !u!1001 &552267607
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1591,7 +1624,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7270800659693831830, guid: 44afb0fd043e842429cdc0417696e4e5, type: 3}
+    - {fileID: 627784532392600324, guid: 44afb0fd043e842429cdc0417696e4e5, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -1622,6 +1657,9 @@ MonoBehaviour:
   moveDuration: 1.2
   rotationSpeed: 25
   delay: 0
+  bgMusicSource: {fileID: 0}
+  bgMusic: {fileID: 0}
+  playButtonClickSound: {fileID: 0}
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -1749,6 +1787,9 @@ MonoBehaviour:
   moveDuration: 1.2
   rotationSpeed: 25
   delay: 0
+  bgMusicSource: {fileID: 0}
+  bgMusic: {fileID: 0}
+  playButtonClickSound: {fileID: 0}
 --- !u!1 &771464047
 GameObject:
   m_ObjectHideFlags: 0
@@ -1834,22 +1875,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6313613350232643510, guid: 7f9efb424fe4451429cbdcc0bdc8ea5c, type: 3}
   m_PrefabInstance: {fileID: 100982091}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &819467133
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 819467129}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f2921c89df6c054f86a92f4a11247c4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SplashGemPop
-  moveOffset: {x: 0, y: 80}
-  moveDuration: 1.2
-  rotationSpeed: 25
-  delay: 0
 --- !u!114 &819467134
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1866,6 +1891,106 @@ MonoBehaviour:
   moveDuration: 1.2
   rotationSpeed: 25
   delay: 0
+  bgMusicSource: {fileID: 819467135}
+  bgMusic: {fileID: 8300000, guid: 066004b125cba7e4d835007ec9328024, type: 3}
+  playButtonClickSound: {fileID: 8300000, guid: 027ad089b8a78a248b7b02e51a62b9ca, type: 3}
+--- !u!82 &819467135
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 819467129}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &976802358
 GameObject:
   m_ObjectHideFlags: 0
@@ -1941,6 +2066,9 @@ MonoBehaviour:
   moveDuration: 1.2
   rotationSpeed: 25
   delay: 0
+  bgMusicSource: {fileID: 0}
+  bgMusic: {fileID: 0}
+  playButtonClickSound: {fileID: 0}
 --- !u!1 &1128660081 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5720054848446274202, guid: 7c3de68974fb1f64d873d5c1fda8748e, type: 3}
@@ -1967,6 +2095,9 @@ MonoBehaviour:
   moveDuration: 1.2
   rotationSpeed: 25
   delay: 0
+  bgMusicSource: {fileID: 0}
+  bgMusic: {fileID: 0}
+  playButtonClickSound: {fileID: 0}
 --- !u!114 &1128660086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1983,6 +2114,9 @@ MonoBehaviour:
   moveDuration: 1.2
   rotationSpeed: 25
   delay: 0
+  bgMusicSource: {fileID: 0}
+  bgMusic: {fileID: 0}
+  playButtonClickSound: {fileID: 0}
 --- !u!1001 &1150366267
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2087,7 +2221,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7270800659693831830, guid: 7c3de68974fb1f64d873d5c1fda8748e, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -2202,7 +2337,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7270800659693831830, guid: 499356d470cd5d547b037c1575bcaa42, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -2588,7 +2724,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7270800659693831830, guid: 499356d470cd5d547b037c1575bcaa42, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -2622,6 +2759,9 @@ MonoBehaviour:
   moveDuration: 1.2
   rotationSpeed: 25
   delay: 0
+  bgMusicSource: {fileID: 0}
+  bgMusic: {fileID: 0}
+  playButtonClickSound: {fileID: 0}
 --- !u!1001 &1582886502
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2714,7 +2854,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7270800659693831830, guid: 499356d470cd5d547b037c1575bcaa42, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -2814,7 +2955,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7270800659693831830, guid: 656cde3e79dfccc40806b2da3de865a7, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -2851,6 +2993,9 @@ MonoBehaviour:
   moveDuration: 1.2
   rotationSpeed: 25
   delay: 0
+  bgMusicSource: {fileID: 0}
+  bgMusic: {fileID: 0}
+  playButtonClickSound: {fileID: 0}
 --- !u!114 &1602704022
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2867,6 +3012,9 @@ MonoBehaviour:
   moveDuration: 1.2
   rotationSpeed: 25
   delay: 0
+  bgMusicSource: {fileID: 0}
+  bgMusic: {fileID: 0}
+  playButtonClickSound: {fileID: 0}
 --- !u!224 &1669759158 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6313613350232643510, guid: dd53c5611ce5135418e482024d44294c, type: 3}
@@ -2976,7 +3124,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7270800659693831830, guid: dd53c5611ce5135418e482024d44294c, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -3010,6 +3159,9 @@ MonoBehaviour:
   moveDuration: 1.2
   rotationSpeed: 25
   delay: 0
+  bgMusicSource: {fileID: 0}
+  bgMusic: {fileID: 0}
+  playButtonClickSound: {fileID: 0}
 --- !u!1 &1873717239
 GameObject:
   m_ObjectHideFlags: 0
@@ -3208,7 +3360,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7270800659693831830, guid: 7c3de68974fb1f64d873d5c1fda8748e, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -3449,7 +3602,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7270800659693831830, guid: 7f9efb424fe4451429cbdcc0bdc8ea5c, type: 3}
+    - {fileID: 627784532392600324, guid: 7f9efb424fe4451429cbdcc0bdc8ea5c, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -3486,6 +3641,9 @@ MonoBehaviour:
   moveDuration: 1.2
   rotationSpeed: 25
   delay: 0
+  bgMusicSource: {fileID: 0}
+  bgMusic: {fileID: 0}
+  playButtonClickSound: {fileID: 0}
 --- !u!1 &2053290059
 GameObject:
   m_ObjectHideFlags: 0
@@ -3620,6 +3778,9 @@ MonoBehaviour:
   moveDuration: 1.2
   rotationSpeed: 25
   delay: 0
+  bgMusicSource: {fileID: 0}
+  bgMusic: {fileID: 0}
+  playButtonClickSound: {fileID: 0}
 --- !u!114 &2085253950
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3636,6 +3797,9 @@ MonoBehaviour:
   moveDuration: 1.2
   rotationSpeed: 25
   delay: 0
+  bgMusicSource: {fileID: 0}
+  bgMusic: {fileID: 0}
+  playButtonClickSound: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

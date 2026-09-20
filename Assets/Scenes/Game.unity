@@ -459,7 +459,7 @@ GameObject:
   - component: {fileID: 93213158}
   - component: {fileID: 93213157}
   m_Layer: 5
-  m_Name: MainMenu
+  m_Name: AdsButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -530,7 +530,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1308419737}
         m_TargetAssemblyTypeName: FailPanel, Assembly-CSharp
-        m_MethodName: MainMenu
+        m_MethodName: WatchAdForExtraMoves
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -560,7 +560,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: bc9c1a05473a3554facade8922a5553d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 31c82346e6049bf42871c19c41422c34, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5705,6 +5705,7 @@ MonoBehaviour:
   goalNotCompletedCanvasGroup: {fileID: 194831644}
   fadeDelay: 0.7
   fadeDuration: 1.2
+  extraMoves: 5
 --- !u!82 &1308419738
 AudioSource:
   m_ObjectHideFlags: 0

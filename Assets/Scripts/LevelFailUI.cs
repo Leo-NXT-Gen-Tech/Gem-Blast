@@ -3,6 +3,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using GoogleMobileAds.Api;
 
 public class FailPanel : MonoBehaviour
 {
@@ -37,6 +38,15 @@ public class FailPanel : MonoBehaviour
     [SerializeField] private float fadeDelay = 0.7f;
     [SerializeField] private float fadeDuration = 1.2f;
 
+    // =========================================================
+    // REWARDED ADS
+    // =========================================================
+
+    [Header("Rewarded Ad")]
+    [SerializeField] private int extraMoves = 5;
+
+    private RewardedAd rewardedAd;
+
     private Coroutine emojiCoroutine;
     private Coroutine fadeCoroutine;
 
@@ -58,6 +68,104 @@ public class FailPanel : MonoBehaviour
 
         ResetFailEmojiAnimation();
         ResetFailFade();
+
+        // Initialize Ads
+        InitializeRewardedAd();
+    }
+
+    // =========================================================
+    // REWARDED ADS - INITIALIZE
+    // =========================================================
+
+    private void InitializeRewardedAd()
+    {
+        MobileAds.Initialize(initStatus =>
+        {
+            LoadRewardedAd();
+        });
+    }
+
+    // =========================================================
+    // LOAD REWARDED AD
+    // =========================================================
+
+    private void LoadRewardedAd()
+    {
+        // Google test rewarded ad ID
+        string adUnitId = "ca-app-pub-3940256099942544/5224351";
+
+        AdRequest request = new AdRequest();
+
+        RewardedAd.Load(
+            adUnitId,
+            request,
+            (RewardedAd ad, LoadAdError error) =>
+            {
+                if (error != null || ad == null)
+                {
+                    Debug.LogWarning(
+                        "Rewarded Ad failed to load: " + error
+                    );
+
+                    return;
+                }
+
+                rewardedAd = ad;
+
+                Debug.Log(
+                    "Rewarded Ad loaded successfully."
+                );
+            }
+        );
+    }
+
+    // =========================================================
+    // WATCH AD BUTTON
+    // =========================================================
+
+    public void WatchAdForExtraMoves()
+    {
+        if (rewardedAd != null && rewardedAd.CanShowAd())
+        {
+            rewardedAd.Show((Reward reward) =>
+            {
+                GiveExtraMoves();
+            });
+        }
+        else
+        {
+            Debug.LogWarning(
+                "Rewarded Ad is not ready."
+            );
+
+            LoadRewardedAd();
+        }
+    }
+
+    // =========================================================
+    // GIVE EXTRA MOVES AFTER AD
+    // =========================================================
+
+    private void GiveExtraMoves()
+    {
+        BoardManager boardManager = FindFirstObjectByType<BoardManager>();
+
+        if (boardManager != null)
+        {
+            boardManager.AddExtraMoves(extraMoves);
+        }
+
+        if (panel != null)
+            panel.SetActive(false);
+
+        Debug.Log(
+            "Rewarded Ad completed. Extra moves added: "
+            + extraMoves
+        );
+
+        // Load another ad for future use
+        rewardedAd = null;
+        LoadRewardedAd();
     }
 
     // =========================================================

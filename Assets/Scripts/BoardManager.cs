@@ -4344,4 +4344,13 @@ public class BoardManager : MonoBehaviour
     if (image2 != null)
         image2.color = originalColor2;
     }
+
+    //REWARDED
+
+    public void AddExtraMoves(int amount)
+    {
+        moves += amount;
+        levelFailed = false;
+        UpdateUI();
+    }
 }

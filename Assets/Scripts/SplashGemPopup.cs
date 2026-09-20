@@ -13,6 +13,11 @@ public class SplashGemLoop : MonoBehaviour
     [Header("Timing")]
     [SerializeField] private float delay = 0f;
 
+    [Header("Sound")]
+    [SerializeField] private AudioSource bgMusicSource;
+    [SerializeField] private AudioClip bgMusic;
+    [SerializeField] private AudioClip playButtonClickSound;
+
     private RectTransform rect;
     private Vector2 originalPosition;
     private bool isPlaying = true;
@@ -25,6 +30,14 @@ public class SplashGemLoop : MonoBehaviour
 
     private void Start()
     {
+        // Start Background Music
+        if (bgMusicSource != null && bgMusic != null)
+        {
+            bgMusicSource.clip = bgMusic;
+            bgMusicSource.loop = true;
+            bgMusicSource.Play();
+        }
+
         StartCoroutine(AnimateGem());
     }
 
@@ -34,7 +47,6 @@ public class SplashGemLoop : MonoBehaviour
 
         while (isPlaying)
         {
-            // બહાર જવું
             Vector2 outsidePosition = originalPosition + moveOffset;
 
             yield return MoveGem(
@@ -45,7 +57,6 @@ public class SplashGemLoop : MonoBehaviour
             if (!isPlaying)
                 yield break;
 
-            // પાછું આવવું
             yield return MoveGem(
                 outsidePosition,
                 originalPosition
@@ -63,7 +74,6 @@ public class SplashGemLoop : MonoBehaviour
 
             float t = time / moveDuration;
 
-            // Smooth movement
             t = Mathf.SmoothStep(0f, 1f, t);
 
             rect.anchoredPosition = Vector2.Lerp(
@@ -72,7 +82,6 @@ public class SplashGemLoop : MonoBehaviour
                 t
             );
 
-            // Continuous rotation
             rect.Rotate(
                 0f,
                 0f,
@@ -83,6 +92,25 @@ public class SplashGemLoop : MonoBehaviour
         }
 
         rect.anchoredPosition = to;
+    }
+
+    // PLAY BUTTON માટે આ function લગાવવો
+    public void PlayButtonPressed()
+    {
+        // Play button click sound
+        if (bgMusicSource != null && playButtonClickSound != null)
+        {
+            bgMusicSource.PlayOneShot(playButtonClickSound);
+        }
+
+        // Background music તરત બંધ
+        if (bgMusicSource != null)
+        {
+            bgMusicSource.Stop();
+        }
+
+        // Gem animation stop
+        StopAnimation();
     }
 
     public void StopAnimation()
