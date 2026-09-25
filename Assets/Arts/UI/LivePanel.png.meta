@@ -1,0 +1,1066 @@
+fileFormatVersion: 2
+guid: 63d724502952b524aa4e0aff9e14a595
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 7749769682785803020
+    second: LivePanel_0
+  - first:
+      213: 8541420664456326381
+    second: LivePanel_1
+  - first:
+      213: 6963486904040265530
+    second: LivePanel_2
+  - first:
+      213: -7455156378150280257
+    second: LivePanel_3
+  - first:
+      213: 6350191091384300366
+    second: LivePanel_4
+  - first:
+      213: -6841007432963653499
+    second: LivePanel_5
+  - first:
+      213: 2132572400193552568
+    second: LivePanel_6
+  - first:
+      213: -9004648235193146940
+    second: LivePanel_7
+  - first:
+      213: -7154219943574338670
+    second: LivePanel_8
+  - first:
+      213: -2134865472807433465
+    second: LivePanel_9
+  - first:
+      213: 8989956745152291961
+    second: LivePanel_10
+  - first:
+      213: 1397661452496522942
+    second: LivePanel_11
+  - first:
+      213: -5764283141178885459
+    second: LivePanel_12
+  - first:
+      213: 4041896993989019611
+    second: LivePanel_13
+  - first:
+      213: -6576777690423931334
+    second: LivePanel_14
+  - first:
+      213: 7300606862580398447
+    second: LivePanel_15
+  - first:
+      213: 7800877584465002375
+    second: LivePanel_16
+  - first:
+      213: -7799300051585693057
+    second: LivePanel_17
+  - first:
+      213: 1098439957353595314
+    second: LivePanel_18
+  - first:
+      213: 3362647600897045683
+    second: LivePanel_19
+  - first:
+      213: -578191943921923153
+    second: LivePanel_20
+  - first:
+      213: 3496634329394567220
+    second: LivePanel_21
+  - first:
+      213: 5290908073035549050
+    second: LivePanel_22
+  - first:
+      213: 3015563952632424083
+    second: LivePanel_23
+  - first:
+      213: 6014513061520516230
+    second: LivePanel_24
+  - first:
+      213: -3221729234744401227
+    second: LivePanel_25
+  - first:
+      213: 3978061848838104179
+    second: LivePanel_26
+  - first:
+      213: -2071238493890967937
+    second: LivePanel_27
+  - first:
+      213: 1222084051003130607
+    second: LivePanel_28
+  - first:
+      213: -1541511855243733937
+    second: LivePanel_29
+  - first:
+      213: -7433157614107615269
+    second: LivePanel_30
+  - first:
+      213: 9137100059028244179
+    second: LivePanel_31
+  - first:
+      213: 3971395793692454722
+    second: LivePanel_32
+  - first:
+      213: -556173923616456420
+    second: LivePanel_33
+  - first:
+      213: -6192034711713259641
+    second: LivePanel_34
+  - first:
+      213: -4978827539102007744
+    second: LivePanel_35
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: 47
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 1
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: LivePanel_0
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 33
+        width: 1999
+        height: 673
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c0b1a896776bc8b60800000000000000
+      internalID: 7749769682785803020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LivePanel_1
+      rect:
+        serializedVersion: 2
+        x: 190
+        y: 704
+        width: 96
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: deca91607d8398670800000000000000
+      internalID: 8541420664456326381
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LivePanel_2
+      rect:
+        serializedVersion: 2
+        x: 377
+        y: 689
+        width: 7
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a379761f17643a060800000000000000
+      internalID: 6963486904040265530
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LivePanel_3
+      rect:
+        serializedVersion: 2
+        x: 709
+        y: 660
+        width: 33
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fb36d5fe5c6f98890800000000000000
+      internalID: -7455156378150280257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LivePanel_4
+      rect:
+        serializedVersion: 2
+        x: 880
+        y: 695
+        width: 19
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e43bfc12729602850800000000000000
+      internalID: 6350191091384300366
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LivePanel_5
+      rect:
+        serializedVersion: 2
+        x: 1272
+        y: 639
+        width: 44
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 58005642cfbdf01a0800000000000000
+      internalID: -6841007432963653499
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LivePanel_6
+      rect:
+        serializedVersion: 2
+        x: 1685
+        y: 679
+        width: 25
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8b0c6539c4b689d10800000000000000
+      internalID: 2132572400193552568
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LivePanel_7
+      rect:
+        serializedVersion: 2
+        x: 126
+        y: 687
+        width: 19
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c1e6f58320190380800000000000000
+      internalID: -9004648235193146940
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LivePanel_8
+      rect:
+        serializedVersion: 2
+        x: 819
+        y: 691
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2938c32bdda17bc90800000000000000
+      internalID: -7154219943574338670
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LivePanel_9
+      rect:
+        serializedVersion: 2
+        x: 1357
+        y: 676
+        width: 19
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 70b011ad92f6f52e0800000000000000
+      internalID: -2134865472807433465
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LivePanel_10
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 645
+        width: 29
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 974ede4670eb2cc70800000000000000
+      internalID: 8989956745152291961
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LivePanel_11
+      rect:
+        serializedVersion: 2
+        x: 759
+        y: 643
+        width: 62
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ebecf489fad756310800000000000000
+      internalID: 1397661452496522942
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LivePanel_12
+      rect:
+        serializedVersion: 2
+        x: 868
+        y: 675
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: daa724906072100b0800000000000000
+      internalID: -5764283141178885459
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LivePanel_13
+      rect:
+        serializedVersion: 2
+        x: 874
+        y: 675
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bd74f61b6e3b71830800000000000000
+      internalID: 4041896993989019611
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LivePanel_14
+      rect:
+        serializedVersion: 2
+        x: 938
+        y: 673
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a3e419b29879ab4a0800000000000000
+      internalID: -6576777690423931334
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LivePanel_15
+      rect:
+        serializedVersion: 2
+        x: 944
+        y: 673
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f6932e0e247f05560800000000000000
+      internalID: 7300606862580398447
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LivePanel_16
+      rect:
+        serializedVersion: 2
+        x: 1132
+        y: 641
+        width: 61
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 78ff75e05d8424c60800000000000000
+      internalID: 7800877584465002375
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LivePanel_17
+      rect:
+        serializedVersion: 2
+        x: 1355
+        y: 660
+        width: 9
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f7a8c80fce153c390800000000000000
+      internalID: -7799300051585693057
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LivePanel_18
+      rect:
+        serializedVersion: 2
+        x: 1457
+        y: 644
+        width: 35
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2b1082942517e3f00800000000000000
+      internalID: 1098439957353595314
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LivePanel_19
+      rect:
+        serializedVersion: 2
+        x: 1491
+        y: 673
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3b4b94c4d268aae20800000000000000
+      internalID: 3362647600897045683
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LivePanel_20
+      rect:
+        serializedVersion: 2
+        x: 1587
+        y: 675
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fab8a8a8d79d9f7f0800000000000000
+      internalID: -578191943921923153
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LivePanel_21
+      rect:
+        serializedVersion: 2
+        x: 1643
+        y: 643
+        width: 39
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 438dff8856a868030800000000000000
+      internalID: 3496634329394567220
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LivePanel_22
+      rect:
+        serializedVersion: 2
+        x: 1697
+        y: 629
+        width: 49
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a79c7882cd41d6940800000000000000
+      internalID: 5290908073035549050
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LivePanel_23
+      rect:
+        serializedVersion: 2
+        x: 730
+        y: 651
+        width: 19
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 396e022107f69d920800000000000000
+      internalID: 3015563952632424083
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LivePanel_24
+      rect:
+        serializedVersion: 2
+        x: 822
+        y: 655
+        width: 19
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 684a0e063c7d77350800000000000000
+      internalID: 6014513061520516230
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LivePanel_25
+      rect:
+        serializedVersion: 2
+        x: 1198
+        y: 641
+        width: 37
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5b2a198945e1a43d0800000000000000
+      internalID: -3221729234744401227
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LivePanel_26
+      rect:
+        serializedVersion: 2
+        x: 1387
+        y: 657
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3746782cc2ae43730800000000000000
+      internalID: 3978061848838104179
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LivePanel_27
+      rect:
+        serializedVersion: 2
+        x: 1513
+        y: 649
+        width: 25
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f76838e409b7143e0800000000000000
+      internalID: -2071238493890967937
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LivePanel_28
+      rect:
+        serializedVersion: 2
+        x: 1547
+        y: 649
+        width: 11
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fe246b138f6b5f010800000000000000
+      internalID: 1222084051003130607
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LivePanel_29
+      rect:
+        serializedVersion: 2
+        x: 1627
+        y: 659
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f44d42b82237b9ae0800000000000000
+      internalID: -1541511855243733937
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LivePanel_30
+      rect:
+        serializedVersion: 2
+        x: 1674
+        y: 657
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bdf10a3588e18d890800000000000000
+      internalID: -7433157614107615269
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LivePanel_31
+      rect:
+        serializedVersion: 2
+        x: 1683
+        y: 657
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d6449fd7108dce70800000000000000
+      internalID: 9137100059028244179
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LivePanel_32
+      rect:
+        serializedVersion: 2
+        x: 874
+        y: 79
+        width: 7
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 24fe489de6b3d1730800000000000000
+      internalID: 3971395793692454722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LivePanel_33
+      rect:
+        serializedVersion: 2
+        x: 1397
+        y: 71
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c11818163c21848f0800000000000000
+      internalID: -556173923616456420
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LivePanel_34
+      rect:
+        serializedVersion: 2
+        x: 1793
+        y: 71
+        width: 12
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 78f517b8c39711aa0800000000000000
+      internalID: -6192034711713259641
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LivePanel_35
+      rect:
+        serializedVersion: 2
+        x: 1761
+        y: 51
+        width: 13
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 04e74ed6bb6a7eab0800000000000000
+      internalID: -4978827539102007744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      LivePanel_0: 7749769682785803020
+      LivePanel_1: 8541420664456326381
+      LivePanel_10: 8989956745152291961
+      LivePanel_11: 1397661452496522942
+      LivePanel_12: -5764283141178885459
+      LivePanel_13: 4041896993989019611
+      LivePanel_14: -6576777690423931334
+      LivePanel_15: 7300606862580398447
+      LivePanel_16: 7800877584465002375
+      LivePanel_17: -7799300051585693057
+      LivePanel_18: 1098439957353595314
+      LivePanel_19: 3362647600897045683
+      LivePanel_2: 6963486904040265530
+      LivePanel_20: -578191943921923153
+      LivePanel_21: 3496634329394567220
+      LivePanel_22: 5290908073035549050
+      LivePanel_23: 3015563952632424083
+      LivePanel_24: 6014513061520516230
+      LivePanel_25: -3221729234744401227
+      LivePanel_26: 3978061848838104179
+      LivePanel_27: -2071238493890967937
+      LivePanel_28: 1222084051003130607
+      LivePanel_29: -1541511855243733937
+      LivePanel_3: -7455156378150280257
+      LivePanel_30: -7433157614107615269
+      LivePanel_31: 9137100059028244179
+      LivePanel_32: 3971395793692454722
+      LivePanel_33: -556173923616456420
+      LivePanel_34: -6192034711713259641
+      LivePanel_35: -4978827539102007744
+      LivePanel_4: 6350191091384300366
+      LivePanel_5: -6841007432963653499
+      LivePanel_6: 2132572400193552568
+      LivePanel_7: -9004648235193146940
+      LivePanel_8: -7154219943574338670
+      LivePanel_9: -2134865472807433465
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
